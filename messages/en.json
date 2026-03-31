@@ -46,7 +46,18 @@
     "email": "Email"
   },
   "skills": {
-    "title": "SKILLS & ABILITIES"
+    "title": "SKILLS & ABILITIES",
+    "filterAll": "ALL",
+    "filterFrontend": "FRONTEND",
+    "filterMobile": "MOBILE",
+    "filterTooling": "TOOLING",
+    "filterLeadership": "LEADERSHIP",
+    "categoryFrontend": "FRONTEND",
+    "categoryMobile": "MOBILE",
+    "categoryTooling": "TOOLING",
+    "categoryLeadership": "LEADERSHIP",
+    "lvl": "LVL",
+    "filterLabel": "SKILL CATEGORY FILTERS"
   },
   "quests": {
     "title": "COMPLETED QUESTS",
