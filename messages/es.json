@@ -46,7 +46,17 @@
     "email": "Email"
   },
   "skills": {
-    "title": "HABILIDADES Y PODERES"
+    "title": "HABILIDADES Y PODERES",
+    "filterAll": "TODAS",
+    "filterFrontend": "FRONTEND",
+    "filterMobile": "MÓVIL",
+    "filterTooling": "HERRAMIENTAS",
+    "filterLeadership": "LIDERAZGO",
+    "categoryFrontend": "FRONTEND",
+    "categoryMobile": "MÓVIL",
+    "categoryTooling": "HERRAMIENTAS",
+    "categoryLeadership": "LIDERAZGO",
+    "lvl": "NVL"
   },
   "quests": {
     "title": "MISIONES COMPLETADAS",

@@ -65,7 +65,7 @@ RootLayout (server)
       │     ├─ TabNav (client — tab switching + ASK PABLO button) ✅
       │     └─ AnimatePresence mode="wait" (tab content transitions)
       │        ├─ StatsSection (client — useTranslations) ✅
-      │        ├─ SkillsSection (client — useTranslations) ⬜ placeholder
+      │        ├─ SkillsSection (client — useTranslations + useState) ✅
       │        ├─ QuestsSection (client — useTranslations) ⬜ placeholder
       │        └─ ItemsSection (client — useTranslations) ⬜ placeholder
       └─ AnimatePresence (overlay)
@@ -77,14 +77,15 @@ app/api/chat/route.ts (server — Anthropic API proxy) ⬜ stub
 ## File structure
 
 ```
-types/index.ts              Screen, PortfolioTab, ChatMessage types                  ✅
+types/index.ts              Screen, PortfolioTab, ChatMessage, Skill,                ✅
+                             SkillCategory types
 components/TitleScreen.tsx   Game title screen with PRESS START                       ✅
 components/PortfolioScreen.tsx  Tabbed RPG menu (tab state + AnimatePresence)          ✅
 components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ⬜ placeholder
 components/HudBar.tsx        Top HUD — name, role, EN/ES cookie toggle                ✅
 components/TabNav.tsx        Tab navigation — 4 tabs + ASK PABLO overlay trigger      ✅
 components/StatsSection.tsx  Bio / character stats                                    ✅
-components/SkillsSection.tsx Tech skills as XP bars                                   ⬜ placeholder
+components/SkillsSection.tsx Tech skills as XP bars with category filters            ✅
 components/QuestsSection.tsx Work experience as quests                                ⬜ placeholder
 components/ItemsSection.tsx  Projects as collectible items                            ⬜ placeholder
 app/api/chat/route.ts       POST endpoint for Anthropic chat                         ⬜ stub
@@ -92,7 +93,7 @@ i18n/request.ts             next-intl request config (cookie-based locale)      
 messages/en.json             English translations (nav, title, stats, skills,          ✅
                              quests, items, chat, hud sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
-data/                        (future) Content data files for skills, quests, items    ⬜ planned (directory not yet created)
+data/                        Content data files for skills (quests, items planned)   ✅ (data/skills.ts created)
 ```
 
 ## Open questions & decisions
@@ -145,3 +146,17 @@ See HudBar design decision above — full details there.
 
 ### PortfolioScreen + TabNav (completed)
 See PortfolioScreen tab transitions decision above — full details there.
+
+### SkillsSection (completed)
+- Data lives in `data/skills.ts` — typed `Skill[]` array with 14 skills across 4 categories
+  (frontend, mobile, tooling, leadership). `Skill` and `SkillCategory` types in `types/index.ts`.
+- Category filter tabs: ALL / FRONTEND / MOBILE / TOOLING / LEADERSHIP. Active filter highlighted
+  with `border-border-active text-accent-gold`. Filter state managed via `useState<Filter>`.
+- When ALL is selected, skills are grouped by category with `▸ CATEGORY` headers.
+  When a specific category is selected, group headers are hidden.
+- Each skill row: name (left), pixel XP bar (center, `border-2 border-border`), LVL number (right, gold).
+  Bar fill width = `(level / 10) * 100%`. Fill colour: gold for level 8+, green for 5–7, muted below 5.
+- Skill names are kept in English (tech terms). All UI labels (title, filter names, category headers,
+  "LVL" prefix) are translated via `useTranslations('skills')` with keys in both en.json and es.json.
+- XP bar fill uses a single inline `style={{ width }}` for the dynamic percentage — unavoidable since
+  Tailwind cannot do runtime-computed widths. All other styling is Tailwind classes.
