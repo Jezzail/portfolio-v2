@@ -55,10 +55,11 @@ Tabs in PortfolioScreen (these are the section names, keep them):
 
 ## i18n
 next-intl handles English / Spanish. All user-facing strings live in:
-- messages/en.json
-- messages/es.json
+- messages/en.json  ← exists, add new keys here
+- messages/es.json  ← exists, mirror every key with Spanish translation
 Language toggle in the HUD — EN / ES pill toggle.
 NEVER hardcode user-facing strings in components. Always use useTranslations().
+When adding a new UI string, add it to BOTH files before using it in a component.
 
 ## Code conventions — NON NEGOTIABLE
 - App Router only. Never use Pages Router patterns.

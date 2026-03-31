@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "stats": "STATS",
+    "skills": "SKILLS",
+    "quests": "QUESTS",
+    "items": "ITEMS",
+    "askPablo": "ASK PABLO"
+  },
+  "title": {
+    "pressStart": "PRESS START",
+    "saveSlot": "SAVE SLOT",
+    "continue": "CONTINUE"
+  },
+  "stats": {
+    "title": "CHARACTER STATS",
+    "name": "NAME",
+    "class": "CLASS",
+    "level": "LEVEL",
+    "location": "LOCATION",
+    "bio": "BIO"
+  },
+  "skills": {
+    "title": "SKILLS & ABILITIES"
+  },
+  "quests": {
+    "title": "COMPLETED QUESTS",
+    "status": "COMPLETED"
+  },
+  "items": {
+    "title": "INVENTORY",
+    "viewProject": "VIEW PROJECT"
+  },
+  "chat": {
+    "title": "ASK PABLO",
+    "placeholder": "Type your question...",
+    "send": "SEND",
+    "thinking": "THINKING...",
+    "error": "ERROR: Could not reach Pablo."
+  },
+  "hud": {
+    "langToggle": "EN"
+  }
+}
