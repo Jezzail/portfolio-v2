@@ -37,14 +37,14 @@ image-rendering: pixelated on any pixel assets.
 CRT scanline overlay: repeating-linear-gradient on a fixed ::after pseudo-element.
 
 ## Architecture — CRITICAL, read carefully
-This is a SINGLE PAGE APP. No routing, no navigation between pages.
-The entire portfolio is one page (app/page.tsx) with React state controlling 
-which "screen" is visible.
+Target architecture: this should be a SINGLE PAGE APP. No routing, no navigation between pages.
+The goal is for the entire portfolio to live in one page (app/page.tsx), with React state controlling 
+which "screen" is visible instead of using multiple routes.
 
-Three screens, all rendered in DOM, visibility controlled by state:
+When implementing or refactoring app/page.tsx, follow this target flow with three screens, all rendered in the DOM with visibility controlled by state:
 1. TitleScreen — game title screen with save slot and PRESS START
 2. PortfolioScreen — the main portfolio, tabbed RPG menu
-3. ChatScreen — the Ask Pablo AI chat (opens as overlay)
+3. ChatScreen — the Ask Pablo AI chat (opens as overlay on top of the portfolio)
 
 Tabs in PortfolioScreen (these are the section names, keep them):
 - STATS → about me, bio, personal info
