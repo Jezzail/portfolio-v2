@@ -68,10 +68,10 @@ NEVER hardcode user-facing strings in components. Always use useTranslations().
   for page.tsx and layout.tsx.
 - Tailwind for all styling. No CSS modules. No inline style= except for 
   dynamic values that Tailwind cannot handle.
-- All API routes in src/app/api/
-- All components in src/components/
-- All types in src/types/
-- All content/data in src/data/ (never hardcode content in components)
+- All API routes in app/api/
+- All components in components/
+- All types in types/
+- All content/data in data/ (never hardcode content in components)
 - No any in TypeScript. Strict mode is on.
 
 ## Environment variables
