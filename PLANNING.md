@@ -91,7 +91,7 @@ data/                        (future) Content data files
 5. **OG image** — No `opengraph-image` asset exists yet. Should generate one matching the retro
    RPG theme for social sharing.
 
-   ## Open questions
+   ### Open question decisions
 
 1. **Pixel cursor asset** — DECIDED: use a .png file in public/. 
    16x16 pixel sword cursor. Create during polish phase.
