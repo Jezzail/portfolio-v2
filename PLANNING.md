@@ -92,7 +92,7 @@ i18n/request.ts             next-intl request config (cookie-based locale)      
 messages/en.json             English translations (nav, title, stats, skills,          ✅
                              quests, items, chat, hud sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
-data/                        (future) Content data files for skills, quests, items    ⬜ empty
+data/                        (future) Content data files for skills, quests, items    ⬜ planned (directory not yet created)
 ```
 
 ## Open questions & decisions
