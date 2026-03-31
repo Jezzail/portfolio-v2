@@ -88,18 +88,22 @@ export function StatsSection() {
           ─ {t("contact")} ─
         </h3>
         <ul className="space-y-2">
-          {LINKS.map(({ labelKey, href }) => (
-            <li key={labelKey}>
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-primary text-[8px] sm:text-[10px] hover:text-accent-gold transition-colors"
-              >
-                ▶ {t(labelKey)}
-              </a>
-            </li>
-          ))}
+          {LINKS.map(({ labelKey, href }) => {
+            const isHttpLink = href.startsWith("http://") || href.startsWith("https://");
+
+            return (
+              <li key={labelKey}>
+                <a
+                  href={href}
+                  target={isHttpLink ? "_blank" : undefined}
+                  rel={isHttpLink ? "noopener noreferrer" : undefined}
+                  className="text-text-primary text-[8px] sm:text-[10px] hover:text-accent-gold transition-colors"
+                >
+                  ▶ {t(labelKey)}
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>
