@@ -21,10 +21,29 @@
   "stats": {
     "title": "ESTADÍSTICAS",
     "name": "NOMBRE",
+    "nameValue": "Pablo Abril",
     "class": "CLASE",
-    "level": "NIVEL",
+    "classValue": "Ingeniero Frontend Senior",
+    "guild": "GREMIO",
+    "guildValue": "Globaleur",
     "location": "UBICACIÓN",
-    "bio": "BIO"
+    "locationValue": "Seúl, Corea del Sur",
+    "status": "ESTADO",
+    "statusValue": "Abierto a ofertas",
+    "yearsExp": "AÑOS EXP",
+    "yearsExpValue": "10+",
+    "appDownloads": "DESCARGAS APP",
+    "appDownloadsValue": "60K+",
+    "teamSizeLed": "EQUIPO LIDERADO",
+    "teamSizeLedValue": "8",
+    "tasksDelivered": "TAREAS ENTREGADAS",
+    "tasksDeliveredValue": "80+",
+    "bio": "BIO",
+    "bioText": "Soy un desarrollador español en Seúl, forjado por años de trabajo en Europa, EEUU, Brasil y Asia. Me importa crear productos que importen — no solo escribir código. Actualmente soy el único ingeniero frontend en TABA, una app React Native de taxis con más de 60K descargas, donde gestiono todo, desde la arquitectura hasta el lanzamiento. Aporto mentalidad de producto, ojo para el diseño y la determinación de quien ha lanzado proyectos en solitario.",
+    "contact": "CONTACTO",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "email": "Email"
   },
   "skills": {
     "title": "HABILIDADES Y PODERES"
