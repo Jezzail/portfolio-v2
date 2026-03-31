@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "stats": "STATS",
+    "skills": "HABILIDADES",
+    "quests": "MISIONES",
+    "items": "OBJETOS",
+    "askPablo": "PREGUNTA A PABLO"
+  },
+  "title": {
+    "pressStart": "PULSA START",
+    "saveSlot": "RANURA DE GUARDADO",
+    "continue": "CONTINUAR"
+  },
+  "stats": {
+    "title": "ESTADÍSTICAS",
+    "name": "NOMBRE",
+    "class": "CLASE",
+    "level": "NIVEL",
+    "location": "UBICACIÓN",
+    "bio": "BIO"
+  },
+  "skills": {
+    "title": "HABILIDADES Y PODERES"
+  },
+  "quests": {
+    "title": "MISIONES COMPLETADAS",
+    "status": "COMPLETADA"
+  },
+  "items": {
+    "title": "INVENTARIO",
+    "viewProject": "VER PROYECTO"
+  },
+  "chat": {
+    "title": "PREGUNTA A PABLO",
+    "placeholder": "Escribe tu pregunta...",
+    "send": "ENVIAR",
+    "thinking": "PENSANDO...",
+    "error": "ERROR: No se pudo contactar a Pablo."
+  },
+  "hud": {
+    "langToggle": "ES"
+  }
+}
