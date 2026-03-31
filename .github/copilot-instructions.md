@@ -34,7 +34,7 @@ Font: "Press Start 2P" from Google Fonts — used for ALL text, no exceptions.
 No border-radius anywhere — 0px, always. Pixel aesthetic means sharp corners.
 All borders: 2px solid. Never 1px, never 3px.
 image-rendering: pixelated on any pixel assets.
-CRT scanline overlay: repeating-linear-gradient on a fixed ::after pseudoelement.
+CRT scanline overlay: repeating-linear-gradient on a fixed ::after pseudo-element.
 
 ## Architecture — CRITICAL, read carefully
 This is a SINGLE PAGE APP. No routing, no navigation between pages.
