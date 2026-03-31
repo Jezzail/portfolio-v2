@@ -45,6 +45,8 @@
     "error": "ERROR: Could not reach Pablo."
   },
   "hud": {
+    "name": "PABLO ABRIL",
+    "level": "SR. FRONTEND ENGINEER",
     "langToggle": "EN"
   }
 }

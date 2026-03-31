@@ -45,6 +45,8 @@
     "error": "ERROR: No se pudo contactar a Pablo."
   },
   "hud": {
+    "name": "PABLO ABRIL",
+    "level": "ING. FRONTEND SENIOR",
     "langToggle": "ES"
   }
 }
