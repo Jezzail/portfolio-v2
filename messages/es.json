@@ -9,7 +9,14 @@
   "title": {
     "pressStart": "PULSA START",
     "saveSlot": "RANURA DE GUARDADO",
-    "continue": "CONTINUAR"
+    "continue": "CONTINUAR",
+    "gameName": "PABLO ABRIL",
+    "subtitle": "PORTFOLIO",
+    "role": "ING. FRONTEND SENIOR",
+    "location": "SEÚL, KR",
+    "yearsExp": "+10 AÑOS EXP",
+    "downloads": "+60K DESCARGAS",
+    "level": "NV 37"
   },
   "stats": {
     "title": "ESTADÍSTICAS",

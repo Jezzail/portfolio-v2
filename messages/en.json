@@ -9,7 +9,14 @@
   "title": {
     "pressStart": "PRESS START",
     "saveSlot": "SAVE SLOT",
-    "continue": "CONTINUE"
+    "continue": "CONTINUE",
+    "gameName": "PABLO ABRIL",
+    "subtitle": "PORTFOLIO",
+    "role": "SR. FRONTEND ENGINEER",
+    "location": "SEOUL, KR",
+    "yearsExp": "10+ YRS EXP",
+    "downloads": "60K+ DOWNLOADS",
+    "level": "LV 37"
   },
   "stats": {
     "title": "CHARACTER STATS",
