@@ -21,10 +21,29 @@
   "stats": {
     "title": "CHARACTER STATS",
     "name": "NAME",
+    "nameValue": "Pablo Abril",
     "class": "CLASS",
-    "level": "LEVEL",
+    "classValue": "Senior Frontend Engineer",
+    "guild": "GUILD",
+    "guildValue": "Globaleur",
     "location": "LOCATION",
-    "bio": "BIO"
+    "locationValue": "Seoul, South Korea",
+    "status": "STATUS",
+    "statusValue": "Open to Work",
+    "yearsExp": "YEARS EXP",
+    "yearsExpValue": "10+",
+    "appDownloads": "APP DOWNLOADS",
+    "appDownloadsValue": "60K+",
+    "teamSizeLed": "TEAM SIZE LED",
+    "teamSizeLedValue": "8",
+    "tasksDelivered": "TASKS DELIVERED",
+    "tasksDeliveredValue": "80+",
+    "bio": "BIO",
+    "bioText": "I'm a Spanish developer based in Seoul, shaped by years of working across Europe, the US, Brazil, and Asia. I care about building products that matter — not just writing code. Currently the sole frontend engineer on TABA, a live React Native taxi app with 60K+ downloads, where I own everything from architecture to release. I bring a product mindset, a design eye, and the grit of someone who's shipped alone.",
+    "contact": "CONTACT",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "email": "Email"
   },
   "skills": {
     "title": "SKILLS & ABILITIES"
