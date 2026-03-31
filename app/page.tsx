@@ -2,45 +2,45 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import type { Screen } from "@/types";
 import { TitleScreen } from "@/components/TitleScreen";
 import { PortfolioScreen } from "@/components/PortfolioScreen";
 import { ChatScreen } from "@/components/ChatScreen";
 import { HudBar } from "@/components/HudBar";
 
 export default function Home() {
-  const [screen, setScreen] = useState<Screen>("title");
+  const [activeScreen, setActiveScreen] = useState<"title" | "portfolio">("title");
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
-      {screen !== "title" && <HudBar />}
+      {activeScreen !== "title" && <HudBar />}
 
       <AnimatePresence mode="wait">
-        {screen === "title" && (
+        {activeScreen === "title" && (
           <motion.div
             key="title"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <TitleScreen onStart={() => setScreen("portfolio")} />
+            <TitleScreen onStart={() => setActiveScreen("portfolio")} />
           </motion.div>
         )}
 
-        {screen === "portfolio" && (
+        {activeScreen === "portfolio" && (
           <motion.div
             key="portfolio"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <PortfolioScreen onOpenChat={() => setScreen("chat")} />
+            <PortfolioScreen onOpenChat={() => setIsChatOpen(true)} />
           </motion.div>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
-        {screen === "chat" && (
+        {isChatOpen && (
           <motion.div
             key="chat"
             initial={{ opacity: 0 }}
@@ -48,7 +48,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50"
           >
-            <ChatScreen onClose={() => setScreen("portfolio")} />
+            <ChatScreen onClose={() => setIsChatOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>

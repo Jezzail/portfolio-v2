@@ -1,4 +1,4 @@
-export type Screen = "title" | "portfolio" | "chat";
+export type Screen = "title" | "portfolio";
 
 export type PortfolioTab = "stats" | "skills" | "quests" | "items";
 
