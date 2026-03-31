@@ -36,6 +36,9 @@ All borders: 2px solid. Never 1px, never 3px.
 image-rendering: pixelated on any pixel assets.
 CRT scanline overlay: repeating-linear-gradient on a fixed ::after pseudo-element.
 
+Note: These visual rules (Press Start 2P everywhere, no border-radius, 2px borders, pixelated images, etc.) describe the **target/future-state** design system.
+The current template code (e.g., usage of `rounded-full` and Geist/Arial in `app/layout.tsx` and `app/globals.css`) may still violate these rules.
+When modifying or adding UI code, do **not** assume the existing styles already conform; instead, avoid introducing new deviations and, where practical, refactor touched areas toward these target constraints without breaking existing layout/behavior.
 ## Architecture — CRITICAL, read carefully
 Target architecture: this should be a SINGLE PAGE APP. No routing, no navigation between pages.
 The goal is for the entire portfolio to live in one page (app/page.tsx), with React state controlling 
