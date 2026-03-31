@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import type { KeyboardEvent } from "react";
 
 type TitleScreenProps = {
   onStart: () => void;
@@ -10,18 +10,20 @@ type TitleScreenProps = {
 export function TitleScreen({ onStart }: TitleScreenProps) {
   const t = useTranslations("title");
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") onStart();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onStart]);
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onStart();
+    }
+  };
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={onStart}
-      className="flex min-h-screen flex-col items-center justify-center gap-10 px-4 select-none"
+      onKeyDown={handleKeyDown}
+      className="flex min-h-screen flex-col items-center justify-center gap-10 px-4 select-none outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
     >
       {/* ── Game Title ── */}
       <div className="text-center">
