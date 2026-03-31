@@ -50,7 +50,7 @@ export function StatsSection() {
             {t("status")}
           </span>
           <span className="text-accent-green text-[8px] sm:text-[10px]">
-            ● {t("statusValue")}
+            <span aria-hidden="true">● </span>{t("statusValue")}
           </span>
         </div>
       </div>
@@ -99,7 +99,7 @@ export function StatsSection() {
                   rel={isHttpLink ? "noopener noreferrer" : undefined}
                   className="text-text-primary text-[8px] sm:text-[10px] hover:text-accent-gold transition-colors"
                 >
-                  ▶ {t(labelKey)}
+                  <span aria-hidden="true">▶ </span>{t(labelKey)}
                 </a>
               </li>
             );
