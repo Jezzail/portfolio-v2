@@ -56,7 +56,8 @@
     "categoryMobile": "MÓVIL",
     "categoryTooling": "HERRAMIENTAS",
     "categoryLeadership": "LIDERAZGO",
-    "lvl": "NVL"
+    "lvl": "NVL",
+    "filterLabel": "FILTROS DE CATEGORÍA"
   },
   "quests": {
     "title": "MISIONES COMPLETADAS",

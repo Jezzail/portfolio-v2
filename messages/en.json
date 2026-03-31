@@ -56,7 +56,8 @@
     "categoryMobile": "MOBILE",
     "categoryTooling": "TOOLING",
     "categoryLeadership": "LEADERSHIP",
-    "lvl": "LVL"
+    "lvl": "LVL",
+    "filterLabel": "SKILL CATEGORY FILTERS"
   },
   "quests": {
     "title": "COMPLETED QUESTS",
