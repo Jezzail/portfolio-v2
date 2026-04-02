@@ -17,3 +17,18 @@ export type Skill = {
   category: SkillCategory;
   description?: string;
 };
+
+export type QuestStatus = "current" | "completed";
+
+export type QuestFilter = "all" | "current" | "completed";
+
+export type Quest = {
+  id: string;
+  company: string;
+  role: string;
+  start: string;
+  end?: string;
+  location: string;
+  status: QuestStatus;
+  objectives: string[];
+};
