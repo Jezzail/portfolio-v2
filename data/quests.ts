@@ -5,7 +5,7 @@ export const quests: Quest[] = [
     id: "globaleur-rn",
     company: "Globaleur",
     role: "questRoleSrFrontend",
-    period: "2024.12 – PRESENT",
+    start: "2024.12",
     location: "Seoul, KR",
     status: "current",
     objectives: [
@@ -18,7 +18,8 @@ export const quests: Quest[] = [
     id: "globaleur-lead",
     company: "Globaleur",
     role: "questRoleLeadFe",
-    period: "2022.09 – 2024.12",
+    start: "2022.09",
+    end: "2024.12",
     location: "Seoul, KR",
     status: "completed",
     objectives: [
@@ -31,7 +32,8 @@ export const quests: Quest[] = [
     id: "knapp",
     company: "KNAPP AG",
     role: "questRoleSystems",
-    period: "2017.10 – 2021.04",
+    start: "2017.10",
+    end: "2021.04",
     location: "Madrid, ES / Global",
     status: "completed",
     objectives: [
@@ -44,7 +46,8 @@ export const quests: Quest[] = [
     id: "cosentino",
     company: "Cosentino",
     role: "questRoleWebDev",
-    period: "2013.12 – 2017.06",
+    start: "2013.12",
+    end: "2017.06",
     location: "Almería, ES",
     status: "completed",
     objectives: [

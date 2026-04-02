@@ -26,7 +26,8 @@ export type Quest = {
   id: string;
   company: string;
   role: string;
-  period: string;
+  start: string;
+  end?: string;
   location: string;
   status: QuestStatus;
   objectives: string[];

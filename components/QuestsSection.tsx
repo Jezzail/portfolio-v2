@@ -38,14 +38,13 @@ export function QuestsSection() {
         ─ {t("title")} ─
       </h2>
 
-      {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("filterLabel")}>
+      {/* Filter controls */}
+      <div className="flex flex-wrap gap-2" aria-label={t("filterLabel")}>
         {FILTERS.map((f) => (
           <button
             key={f}
             type="button"
-            role="tab"
-            aria-selected={filter === f}
+            aria-pressed={filter === f}
             onClick={() => setFilter(f)}
             className={`border-2 px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
               filter === f
@@ -81,17 +80,17 @@ export function QuestsSection() {
 
             {/* Period · Location */}
             <p className="text-text-muted text-[7px] sm:text-[8px]">
-              {quest.period} · {quest.location}
+              {quest.start} – {quest.end ?? t("present")} · {quest.location}
             </p>
 
             {/* Objectives */}
-            <div className="space-y-1">
+            <ul className="space-y-1">
               {quest.objectives.map((obj) => (
-                <p key={obj} className="text-text-primary text-[7px] sm:text-[8px]">
+                <li key={obj} className="text-text-primary text-[7px] sm:text-[8px]">
                   ▶ {t(obj)}
-                </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>

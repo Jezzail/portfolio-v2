@@ -67,6 +67,7 @@
     "filterLabel": "QUEST STATUS FILTERS",
     "statusCurrent": "ACTIVE",
     "statusCompleted": "COMPLETE",
+    "present": "PRESENT",
     "questRoleSrFrontend": "Sr. Frontend Engineer — React Native",
     "questRoleLeadFe": "Frontend Engineer & Engineering Team Lead",
     "questRoleSystems": "Software Systems Engineer",
