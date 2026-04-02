@@ -60,8 +60,28 @@
     "filterLabel": "SKILL CATEGORY FILTERS"
   },
   "quests": {
-    "title": "COMPLETED QUESTS",
-    "status": "COMPLETED"
+    "title": "QUEST LOG",
+    "filterAll": "ALL",
+    "filterCurrent": "CURRENT",
+    "filterCompleted": "PAST",
+    "filterLabel": "QUEST STATUS FILTERS",
+    "statusCurrent": "ACTIVE",
+    "statusCompleted": "COMPLETE",
+    "questRoleSrFrontend": "Sr. Frontend Engineer — React Native",
+    "questRoleLeadFe": "Frontend Engineer & Engineering Team Lead",
+    "questRoleSystems": "Software Systems Engineer",
+    "questRoleWebDev": "Web Developer",
+    "questObjTaba": "Ship TABA — live React Native taxi app, 60K+ downloads",
+    "questObjSoleFe": "Sole frontend engineer — full ownership of mobile UI layer",
+    "questObj80Tasks": "80+ product tasks delivered independently",
+    "questObjLed8": "Led 8-person engineering team",
+    "questObjSprints": "Sprint planning, task prioritisation, cross-functional alignment",
+    "questObjMentoring": "Code reviews and junior developer mentoring",
+    "questObjWarehouse": "Deployed enterprise logistics warehouse software",
+    "questObjDeployed": "Deployments across Europe, US, Brazil, South Korea",
+    "questObjStakeholder": "Stakeholder communication, documentation, post-launch support",
+    "questObjInternalApps": "Built internal web apps with PHP, JavaScript, MySQL",
+    "questObjIntranet": "Developed and maintained company intranet"
   },
   "items": {
     "title": "INVENTORY",

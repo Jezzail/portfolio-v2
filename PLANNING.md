@@ -66,7 +66,7 @@ RootLayout (server)
       │     └─ AnimatePresence mode="wait" (tab content transitions)
       │        ├─ StatsSection (client — useTranslations) ✅
       │        ├─ SkillsSection (client — useTranslations + useState) ✅
-      │        ├─ QuestsSection (client — useTranslations) ⬜ placeholder
+      │        ├─ QuestsSection (client — useTranslations + useState) ✅
       │        └─ ItemsSection (client — useTranslations) ⬜ placeholder
       └─ AnimatePresence (overlay)
          └─ ChatScreen (client — fixed overlay, chat UI) ⬜ placeholder
@@ -78,7 +78,8 @@ app/api/chat/route.ts (server — Anthropic API proxy) ⬜ stub
 
 ```
 types/index.ts              Screen, PortfolioTab, ChatMessage, Skill,                ✅
-                             SkillCategory types
+                             SkillCategory, Quest, QuestStatus,
+                             QuestFilter types
 components/TitleScreen.tsx   Game title screen with PRESS START                       ✅
 components/PortfolioScreen.tsx  Tabbed RPG menu (tab state + AnimatePresence)          ✅
 components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ⬜ placeholder
@@ -86,14 +87,14 @@ components/HudBar.tsx        Top HUD — name, role, EN/ES cookie toggle        
 components/TabNav.tsx        Tab navigation — 4 tabs + ASK PABLO overlay trigger      ✅
 components/StatsSection.tsx  Bio / character stats                                    ✅
 components/SkillsSection.tsx Tech skills as XP bars with category filters            ✅
-components/QuestsSection.tsx Work experience as quests                                ⬜ placeholder
+components/QuestsSection.tsx Work experience as quests                                ✅
 components/ItemsSection.tsx  Projects as collectible items                            ⬜ placeholder
 app/api/chat/route.ts       POST endpoint for Anthropic chat                         ⬜ stub
 i18n/request.ts             next-intl request config (cookie-based locale)            ✅
 messages/en.json             English translations (nav, title, stats, skills,          ✅
                              quests, items, chat, hud sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
-data/                        Content data files for skills (quests, items planned)   ✅ (data/skills.ts created)
+data/                        Content data files for skills, quests (items planned)   ✅ (data/skills.ts, data/quests.ts)
 ```
 
 ## Open questions & decisions
@@ -160,3 +161,15 @@ See PortfolioScreen tab transitions decision above — full details there.
   "LVL" prefix) are translated via `useTranslations('skills')` with keys in both en.json and es.json.
 - XP bar fill uses a single inline `style={{ width }}` for the dynamic percentage — unavoidable since
   Tailwind cannot do runtime-computed widths. All other styling is Tailwind classes.
+
+### QuestsSection (completed)
+- Data lives in `data/quests.ts` — typed `Quest[]` array with 4 entries (1 current, 3 completed).
+  `Quest`, `QuestStatus`, and `QuestFilter` types in `types/index.ts`.
+- Filter tabs: ALL / CURRENT / PAST. Active filter highlighted with `border-border-active text-accent-gold`.
+  Filter state managed via `useState<QuestFilter>`.
+- Each quest card: bordered container (`border-2 border-border`) with company name (gold), status badge
+  (green border + text for ACTIVE, muted for COMPLETE), role, period · location, and ▶-prefixed objectives.
+- Role names and objective strings are i18n keys resolved via `useTranslations('quests')` — allows
+  full translation while keeping data/quests.ts language-agnostic.
+- Period and location are kept as plain strings (dates and city names don't need translation).
+- All UI labels (title, filter names, status badges) translated in both en.json and es.json.

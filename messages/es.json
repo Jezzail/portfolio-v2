@@ -60,8 +60,28 @@
     "filterLabel": "FILTROS DE CATEGORÍA"
   },
   "quests": {
-    "title": "MISIONES COMPLETADAS",
-    "status": "COMPLETADA"
+    "title": "REGISTRO DE MISIONES",
+    "filterAll": "TODAS",
+    "filterCurrent": "ACTUAL",
+    "filterCompleted": "PASADAS",
+    "filterLabel": "FILTROS DE ESTADO",
+    "statusCurrent": "ACTIVA",
+    "statusCompleted": "COMPLETA",
+    "questRoleSrFrontend": "Ing. Frontend Senior — React Native",
+    "questRoleLeadFe": "Ing. Frontend & Líder de Equipo",
+    "questRoleSystems": "Ingeniero de Sistemas Software",
+    "questRoleWebDev": "Desarrollador Web",
+    "questObjTaba": "Lanzar TABA — app React Native de taxis, 60K+ descargas",
+    "questObjSoleFe": "Único ingeniero frontend — propiedad total de la capa UI móvil",
+    "questObj80Tasks": "80+ tareas de producto entregadas de forma independiente",
+    "questObjLed8": "Lideré equipo de ingeniería de 8 personas",
+    "questObjSprints": "Planificación de sprints, priorización, alineación multifuncional",
+    "questObjMentoring": "Revisiones de código y mentoría de desarrolladores junior",
+    "questObjWarehouse": "Desplegué software logístico empresarial de almacén",
+    "questObjDeployed": "Despliegues en Europa, EEUU, Brasil, Corea del Sur",
+    "questObjStakeholder": "Comunicación con stakeholders, documentación, soporte post-lanzamiento",
+    "questObjInternalApps": "Construí apps web internas con PHP, JavaScript, MySQL",
+    "questObjIntranet": "Desarrollé y mantuve la intranet corporativa"
   },
   "items": {
     "title": "INVENTARIO",
