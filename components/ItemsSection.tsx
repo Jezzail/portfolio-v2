@@ -4,6 +4,10 @@ import { useTranslations } from "next-intl";
 import { items } from "@/data/items";
 import type { ItemRarity } from "@/types";
 
+function assertNever(x: never): never {
+  throw new Error(`Unhandled ItemRarity: ${x as string}`);
+}
+
 const RARITY_I18N: Record<ItemRarity, string> = {
   legendary: "rarityLegendary",
   rare: "rarityRare",
@@ -21,6 +25,8 @@ function rarityColorClass(rarity: ItemRarity): string {
       return "border-accent-green text-accent-green";
     case "locked":
       return "border-text-dim text-text-dim";
+    default:
+      return assertNever(rarity);
   }
 }
 
@@ -98,7 +104,7 @@ export function ItemsSection() {
                     rel="noopener noreferrer"
                     className="inline-block border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-accent-gold tracking-wide hover:border-border-active transition-colors"
                   >
-                    {t("viewProject")}
+                    <span aria-hidden="true">▶ </span>{t("viewProject")}
                   </a>
                   {item.linkNote && (
                     <p className="text-text-muted text-[6px] sm:text-[7px]">
