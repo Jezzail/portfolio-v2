@@ -86,7 +86,21 @@
   },
   "items": {
     "title": "INVENTARIO",
-    "viewProject": "VER PROYECTO"
+    "viewProject": "VER",
+    "rarityLegendary": "LEGENDARIO",
+    "rarityRare": "RARO",
+    "rarityUncommon": "POCO COMÚN",
+    "rarityLocked": "BLOQUEADO",
+    "itemNameTaba": "TABA",
+    "itemDescTaba": "App React Native de taxis para usuarios internacionales en Corea. 60K+ descargas, único ingeniero frontend.",
+    "itemLinkNoteTaba": "Landing del producto — no es el código de Pablo",
+    "itemNamePortfolio": "RPG PORTFOLIO",
+    "itemDescPortfolio": "El portfolio retro RPG que estás viendo ahora mismo. Construido desde cero.",
+    "itemNameGlobaleur": "GLOBALEUR",
+    "itemDescGlobaleur": "Plataforma de viajes — trabajé en el producto React whitelabel. El whitelabel original ya no está activo por circunstancias de la empresa.",
+    "itemLinkNoteGlobaleur": "Landing corporativa — whitelabel ya no activo",
+    "itemNameLocked": "[ SLOT BLOQUEADO ]",
+    "itemDescLocked": "???"
   },
   "chat": {
     "title": "PREGUNTA A PABLO",
