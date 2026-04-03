@@ -67,7 +67,7 @@ RootLayout (server)
       │        ├─ StatsSection (client — useTranslations) ✅
       │        ├─ SkillsSection (client — useTranslations + useState) ✅
       │        ├─ QuestsSection (client — useTranslations + useState) ✅
-      │        └─ ItemsSection (client — useTranslations) ⬜ placeholder
+      │        └─ ItemsSection (client — useTranslations) ✅
       └─ AnimatePresence (overlay)
          └─ ChatScreen (client — fixed overlay, chat UI) ⬜ placeholder
 
@@ -88,13 +88,13 @@ components/TabNav.tsx        Tab navigation — 4 tabs + ASK PABLO overlay trigg
 components/StatsSection.tsx  Bio / character stats                                    ✅
 components/SkillsSection.tsx Tech skills as XP bars with category filters            ✅
 components/QuestsSection.tsx Work experience as quests                                ✅
-components/ItemsSection.tsx  Projects as collectible items                            ⬜ placeholder
+components/ItemsSection.tsx  Projects as collectible items                            ✅
 app/api/chat/route.ts       POST endpoint for Anthropic chat                         ⬜ stub
 i18n/request.ts             next-intl request config (cookie-based locale)            ✅
 messages/en.json             English translations (nav, title, stats, skills,          ✅
                              quests, items, chat, hud sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
-data/                        Content data files for skills, quests (items planned)   ✅ (data/skills.ts, data/quests.ts)
+data/                        Content data files for skills, quests, items            ✅ (data/skills.ts, data/quests.ts, data/items.ts)
 ```
 
 ## Open questions & decisions
@@ -173,3 +173,20 @@ See PortfolioScreen tab transitions decision above — full details there.
   full translation while keeping data/quests.ts language-agnostic.
 - Period and location are kept as plain strings (dates and city names don't need translation).
 - All UI labels (title, filter names, status badges) translated in both en.json and es.json.
+
+### ItemsSection (completed)
+- Data lives in `data/items.ts` — typed `Item[]` array with 4 entries (1 legendary, 1 rare,
+  1 uncommon, 1 locked). `Item` and `ItemRarity` types in `types/index.ts`.
+- No filter tabs — all items displayed in a flat list.
+- Each item card: bordered container (`border-2 border-border`) with item name (gold, or dim if
+  locked), rarity badge (colour-coded: gold for legendary, blue for rare, green for uncommon,
+  dim for locked), description, tech tag row, and `▶ VIEW` link button if URL exists.
+- Locked item: dimmed with `opacity-50`, `border-text-dim`, no link button, `[ SLOT LOCKED ]`
+  name and `???` description.
+- Rarity badge colours: legendary = `accent-gold`, rare = `accent-blue`, uncommon = `accent-green`,
+  locked = `text-dim`.
+- Tech tags are kept as plain English strings (framework names). All UI labels (title, rarity names,
+  item names, descriptions, link notes, view button) translated via `useTranslations('items')`.
+- Items with `linkNote` display a muted note below the link button explaining link context
+  (e.g. "Product landing — not Pablo's code").
+- Link buttons open in new tab with `rel="noopener noreferrer"`.

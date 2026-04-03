@@ -32,3 +32,15 @@ export type Quest = {
   status: QuestStatus;
   objectives: string[];
 };
+
+export type ItemRarity = "legendary" | "rare" | "uncommon" | "locked";
+
+export type Item = {
+  id: string;
+  name: string;
+  rarity: ItemRarity;
+  description: string;
+  tech: string[];
+  link?: string;
+  linkNote?: string;
+};
