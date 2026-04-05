@@ -28,6 +28,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
+      - name: Use exact npm version
+        run: npm install -g npm@10.8.2
+
       - name: Install dependencies
         run: npm ci
 
