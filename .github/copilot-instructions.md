@@ -39,6 +39,7 @@ CRT scanline overlay: repeating-linear-gradient on a fixed ::after pseudo-elemen
 Note: These visual rules (Press Start 2P everywhere, no border-radius, 2px borders, pixelated images, etc.) describe the **target/future-state** design system.
 The current template code (e.g., usage of `rounded-full` and Geist/Arial in `app/layout.tsx` and `app/globals.css`) may still violate these rules.
 When modifying or adding UI code, do **not** assume the existing styles already conform; instead, avoid introducing new deviations and, where practical, refactor touched areas toward these target constraints without breaking existing layout/behavior.
+
 ## Architecture — CRITICAL, read carefully
 Target architecture: this should be a SINGLE PAGE APP. No routing, no navigation between pages.
 The goal is for the entire portfolio to live in one page (app/page.tsx), with React state controlling 
@@ -55,6 +56,19 @@ Tabs in PortfolioScreen (these are the section names, keep them):
 - QUESTS → work experience as completed quests
 - ITEMS → projects as collectible items
 - ASK PABLO → opens ChatScreen overlay
+
+## Avatar emotion system
+The chat API uses an emotion-tag protocol. Claude is instructed via system prompt
+to begin every response with `[EMOTION:X]` where X is one of:
+neutral | happy | thinking | sad | surprised | confused | confident |
+laughing | focused | embarrassed | explaining | error
+
+The route streams this tag as-is. The client (ChatScreen) reads the stream,
+extracts the emotion before the first `]`, updates avatar state, then renders
+the remainder as reply text. Never strip the tag server-side — let the client do it.
+
+Avatar PNGs: `public/avatar/pat_{emotion}.png` (12 files, image-rendering: pixelated).
+`AvatarEmotion` type is defined in `types/index.ts`.
 
 ## i18n
 next-intl handles English / Spanish. All user-facing strings live in:

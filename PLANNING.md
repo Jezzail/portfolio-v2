@@ -71,7 +71,7 @@ RootLayout (server)
       └─ AnimatePresence (overlay)
          └─ ChatScreen (client — fixed overlay, chat UI) ⬜ placeholder
 
-app/api/chat/route.ts (server — Anthropic API proxy) ⬜ stub
+app/api/chat/route.ts (server — Anthropic API proxy) ✅
 ```
 
 ## File structure
@@ -89,7 +89,7 @@ components/StatsSection.tsx  Bio / character stats                              
 components/SkillsSection.tsx Tech skills as XP bars with category filters            ✅
 components/QuestsSection.tsx Work experience as quests                                ✅
 components/ItemsSection.tsx  Projects as collectible items                            ✅
-app/api/chat/route.ts       POST endpoint for Anthropic chat                         ⬜ stub
+app/api/chat/route.ts       POST endpoint for Anthropic chat                         ✅
 i18n/request.ts             next-intl request config (cookie-based locale)            ✅
 messages/en.json             English translations (nav, title, stats, skills,          ✅
                              quests, items, chat, hud sections)
@@ -190,3 +190,38 @@ See PortfolioScreen tab transitions decision above — full details there.
 - Items with `linkNote` display a muted note below the link button explaining link context
   (e.g. "Product landing — not Pablo's code").
 - Link buttons open in new tab with `rel="noopener noreferrer"`.
+
+### CI Pipeline (completed)
+- GitHub Actions workflow configured in `.github/workflows/ci.yml` — runs on pull requests to `main` and pushes to `main`.
+- Pipeline split into two jobs: `check` (runs on PR + push) and `build` (runs only on push).
+- `check` job includes: `npm ci` (clean install), `npm run lint` (ESLint), and `npm run type-check` (TypeScript validation).
+- `build` job depends on `check` (`needs: check`) and executes `npm run build` to catch runtime/import issues.
+- Build step intentionally skipped on PRs to keep CI fast, while still enforcing code quality via lint + type checks.
+- Ensures consistent, reproducible builds and prevents broken code from being merged.
+- Local pre-commit enforcement via Husky — `pre-commit` hook runs lint-staged before every commit.
+- Local pre-push enforcement via Husky — `pre-push` hook runs type-check before every push.
+- Commits are blocked locally if linting or type checks fail, reducing CI failures and improving feedback loop.
+- CI validation on PR ensures all checks pass before merge (aligned with required status checks).
+- No deploy step in CI — Vercel handles automatic deployment on merge to `main`.
+
+### Avatar emotion system
+- 12 expression PNGs live in `public/avatar/` — filenames: `pat_neutral.png`,
+  `pat_happy.png`, `pat_thinking.png`, `pat_sad.png`, `pat_surprised.png`,
+  `pat_confused.png`, `pat_confident.png`, `pat_laughing.png`, `pat_focused.png`,
+  `pat_embarrassed.png`, `pat_explaining.png`, `pat_error.png`.
+- The API system prompt instructs Claude to begin every reply with `[EMOTION:X]`
+  where X is one of the 12 valid emotion strings (lowercase, no spaces).
+- The streaming client reads chunks, extracts the emotion tag before the first `]`,
+  then streams the remainder as the visible reply text.
+- ChatScreen renders the dialogue panel (left) + avatar panel (right), RPG style.
+- Emotion image transitions use CSS `opacity` crossfade (300ms) — no Framer Motion
+  needed for this, keeps it lightweight.
+- `AvatarEmotion` type added to `types/index.ts`.
+
+### ChatScreen layout
+- Fixed overlay (`position: fixed, inset: 0`) on top of PortfolioScreen.
+- Left column: avatar image (current emotion, pixelated rendering), character name tag.
+- Right column: scrollable message history + input row at bottom.
+- Message bubbles: gold border for Pablo, muted border for user.
+- Streaming in progress: blinking cursor `▌` appended to last Pablo bubble.
+- Close button (ESC or × button) calls `onClose` → returns to portfolio.

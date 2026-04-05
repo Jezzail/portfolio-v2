@@ -7,6 +7,20 @@ export type ChatMessage = {
   content: string;
 };
 
+export type AvatarEmotion =
+  | "neutral"
+  | "happy"
+  | "thinking"
+  | "sad"
+  | "surprised"
+  | "confused"
+  | "confident"
+  | "laughing"
+  | "focused"
+  | "embarrassed"
+  | "explaining"
+  | "error";
+
 export type SkillCategory = "frontend" | "mobile" | "tooling" | "leadership";
 
 export type SkillLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
