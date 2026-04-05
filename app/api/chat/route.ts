@@ -1,5 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+// Load pablo-context.md once at module init — single source of truth for the knowledge base.
+const pabloContext = readFileSync(join(process.cwd(), "pablo-context.md"), "utf-8");
 
 const SYSTEM_PROMPT = `You are Pablo Abril. You speak in first person — you ARE Pablo, not an assistant describing him. Use the knowledge base below to answer questions about yourself.
 
@@ -17,68 +22,36 @@ Behaviour:
 
 === KNOWLEDGE BASE ===
 
-# Pablo Abril — AI Agent Knowledge Base
-
-## Identity
-Name: Pablo Abril
-Role: Senior Frontend / React Native Engineer
-Location: Seoul, South Korea (Spanish, born 1988)
-Open to: Remote (Spain or international), onsite Seoul
-Target roles: Senior Frontend Engineer, Tech Lead
-
-## Current position
-Company: Globaleur (Seoul)
-Title: Senior Frontend Engineer — React Native
-Period: December 2024 – present
-Product: TABA — live React Native taxi app for international users in Korea
-Downloads: 60,000+ across iOS and Android
-Responsibilities: Sole frontend engineer. Full ownership of mobile UI layer —
-component architecture, navigation, API integration, release builds for both
-platforms. 80+ product tasks delivered independently.
-
-## Previous experience
-### Globaleur — Frontend Engineer & Engineering Team Lead
-Period: September 2022 – December 2024
-Led 8-person engineering team. Sprint planning, task prioritisation,
-cross-functional alignment. Code reviews, junior dev mentoring.
-
-### KNAPP AG — Software Systems Engineer
-Period: October 2017 – April 2021, Madrid / global travel
-Deployed enterprise logistics warehouse software across Europe, US, Brazil,
-South Korea. Heavy client-facing: documentation, stakeholder communication,
-requirements gathering, post-launch support.
-
-### Cosentino — Web Developer
-Period: December 2013 – June 2017, Almería, Spain
-Built internal web apps and company intranet. PHP, JavaScript, MySQL.
-
-## Technical skills
-Strong: React Native, React.js, TypeScript, JavaScript, Next.js,
-        Mobile Development, Performance Optimisation, Tailwind CSS
-Also: Node.js, Figma, Redux, Firebase, MongoDB, SASS
-
-## Certifications
-- Google Project Management Professional Certificate (Coursera, Feb 2026)
-- React Complete Guide (Udemy, Jun 2022)
-- MERN Fullstack Guide (Udemy, Jul 2022)
-
-## Soft skills
-- End-to-end ownership — comfortable as sole engineer on live product
-- Leadership — managed delivery and people in 8-person team
-- Multicultural — worked across Europe, US, Brazil, Asia
-- Product mindset — cares about why we build, not just how
-- Client communication — enterprise deployment background
-- Design sensibility — pixel-perfect delivery, works closely with designers,
-  created a full MTG community magazine independently
-
-## Personal
-Interests: videogames (since 8-bit era), cinema, travelling, animals
-Languages: Spanish (native), English (fluent)
-Contact: pat43607@gmail.com
-GitHub: github.com/Jezzail
-LinkedIn: linkedin.com/in/pabloabril/
+${pabloContext}
 
 === END KNOWLEDGE BASE ===`;
+
+// Simple in-memory rate limiter: 20 requests per IP per minute.
+// Note: best-effort only — serverless instances don't share memory across invocations.
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 20;
+const RATE_WINDOW_MS = 60_000;
+const CLEANUP_THRESHOLD = 500;
+
+function checkRateLimit(ip: string, limit: number = RATE_LIMIT): boolean {
+  const now = Date.now();
+
+  // Prune expired entries when the map grows large to prevent unbounded memory growth.
+  if (rateLimitMap.size > CLEANUP_THRESHOLD) {
+    for (const [key, val] of rateLimitMap) {
+      if (now > val.resetAt) rateLimitMap.delete(key);
+    }
+  }
+
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= limit) return false;
+  entry.count++;
+  return true;
+}
 
 interface ChatRequestBody {
   messages: { role: "user" | "assistant"; content: string }[];
@@ -101,6 +74,20 @@ function isValidBody(body: unknown): body is ChatRequestBody {
 }
 
 export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip") ??
+    "unknown";
+
+  // Apply a stricter limit to requests whose IP cannot be identified.
+  const effectiveLimit = ip === "unknown" ? 5 : RATE_LIMIT;
+  if (!checkRateLimit(ip, effectiveLimit)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -129,16 +116,19 @@ export async function POST(request: NextRequest) {
   const anthropic = new Anthropic({ apiKey });
 
   try {
-    const stream = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages: body.messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      })),
-      stream: true,
-    });
+    const stream = await anthropic.messages.create(
+      {
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: body.messages.map((m) => ({
+          role: m.role,
+          content: m.content,
+        })),
+        stream: true,
+      },
+      { signal: request.signal }
+    );
 
     const { readable, writable } = new TransformStream<Uint8Array>();
     const writer = writable.getWriter();
@@ -147,6 +137,7 @@ export async function POST(request: NextRequest) {
     (async () => {
       try {
         for await (const event of stream) {
+          if (request.signal.aborted) break;
           if (
             event.type === "content_block_delta" &&
             event.delta.type === "text_delta"
@@ -155,9 +146,11 @@ export async function POST(request: NextRequest) {
           }
         }
       } catch {
-        await writer.write(
-          encoder.encode("[EMOTION:error]Something went wrong. Please try again.")
-        );
+        if (!request.signal.aborted) {
+          await writer.write(
+            encoder.encode("[EMOTION:error]Something went wrong. Please try again.")
+          );
+        }
       } finally {
         await writer.close();
       }
