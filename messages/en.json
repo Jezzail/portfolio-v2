@@ -107,7 +107,10 @@
     "placeholder": "Type your question...",
     "send": "SEND",
     "thinking": "THINKING...",
-    "error": "ERROR: Could not reach Pablo."
+    "error": "ERROR: Could not reach Pablo.",
+    "close": "CLOSE",
+    "pablo": "PABLO",
+    "you": "YOU"
   },
   "hud": {
     "name": "PABLO ABRIL",
