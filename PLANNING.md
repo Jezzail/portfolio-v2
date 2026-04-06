@@ -69,7 +69,7 @@ RootLayout (server)
       │        ├─ QuestsSection (client — useTranslations + useState) ✅
       │        └─ ItemsSection (client — useTranslations) ✅
       └─ AnimatePresence (overlay)
-         └─ ChatScreen (client — fixed overlay, chat UI) ⬜ placeholder
+         └─ ChatScreen (client — fixed overlay, chat UI) ✅
 
 app/api/chat/route.ts (server — Anthropic API proxy) ✅
 ```
@@ -82,7 +82,7 @@ types/index.ts              Screen, PortfolioTab, ChatMessage, Skill,           
                              QuestFilter types
 components/TitleScreen.tsx   Game title screen with PRESS START                       ✅
 components/PortfolioScreen.tsx  Tabbed RPG menu (tab state + AnimatePresence)          ✅
-components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ⬜ placeholder
+components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ✅
 components/HudBar.tsx        Top HUD — name, role, EN/ES cookie toggle                ✅
 components/TabNav.tsx        Tab navigation — 4 tabs + ASK PABLO overlay trigger      ✅
 components/StatsSection.tsx  Bio / character stats                                    ✅
@@ -220,8 +220,17 @@ See PortfolioScreen tab transitions decision above — full details there.
 
 ### ChatScreen layout
 - Fixed overlay (`position: fixed, inset: 0`) on top of PortfolioScreen.
-- Left column: avatar image (current emotion, pixelated rendering), character name tag.
-- Right column: scrollable message history + input row at bottom.
+- Left column: scrollable message history + input row at bottom.
+- Right column (hidden on mobile): avatar image (current emotion, pixelated rendering),
+  character name tag ("▶ PABLO ABRIL" in gold, role in muted below).
 - Message bubbles: gold border for Pablo, muted border for user.
 - Streaming in progress: blinking cursor `▌` appended to last Pablo bubble.
 - Close button (ESC or × button) calls `onClose` → returns to portfolio.
+- RPG text reveal: AI reply text appears one character at a time (30ms interval),
+  simulating classic RPG dialogue boxes. Full text stored in a ref; a `displayedCharCount`
+  state drives the visible slice. The reveal timer continues after the stream ends until
+  all characters are shown, then `isStreaming` is cleared.
+- Emotion fallback: if the API response does not include `[EMOTION:X]` (missing tag,
+  malformed tag, or stream too short), emotion resets to `neutral` instead of staying
+  stuck on `thinking`.
+- Auto-focus: input field regains focus automatically after each send/reply cycle completes.

@@ -107,7 +107,10 @@
     "placeholder": "Escribe tu pregunta...",
     "send": "ENVIAR",
     "thinking": "PENSANDO...",
-    "error": "ERROR: No se pudo contactar a Pablo."
+    "error": "ERROR: No se pudo contactar a Pablo.",
+    "close": "CERRAR",
+    "pablo": "PABLO",
+    "you": "TÚ"
   },
   "hud": {
     "name": "PABLO ABRIL",
