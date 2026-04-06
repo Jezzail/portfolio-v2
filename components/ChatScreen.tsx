@@ -4,6 +4,45 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import type { AvatarEmotion, ChatMessage } from "@/types";
 
+const VALID_EMOTIONS: readonly AvatarEmotion[] = [
+  "neutral", "happy", "thinking", "sad", "surprised", "confused",
+  "confident", "laughing", "focused", "embarrassed", "explaining", "error",
+] as const;
+
+function isValidEmotion(candidate: string): candidate is AvatarEmotion {
+  return (VALID_EMOTIONS as readonly string[]).includes(candidate);
+}
+
+/**
+ * Attempt to extract an [EMOTION:X] tag from the start of emotionBuffer.
+ * Returns the validated emotion and the remaining text, or null if the tag
+ * isn't complete yet (no closing ']' found and buffer is under 50 chars).
+ */
+function tryExtractEmotion(
+  emotionBuffer: string
+): { emotion: AvatarEmotion; rest: string } | null {
+  const closeIdx = emotionBuffer.indexOf("]");
+
+  if (closeIdx !== -1) {
+    const match = emotionBuffer.match(/^\[EMOTION:(\w+)\]/);
+    if (match) {
+      const candidate = match[1];
+      return {
+        emotion: isValidEmotion(candidate) ? candidate : "neutral",
+        rest: emotionBuffer.slice(match[0].length),
+      };
+    }
+    // Malformed tag — treat the whole buffer as plain text
+    return { emotion: "neutral", rest: emotionBuffer };
+  }
+
+  if (emotionBuffer.length > 50) {
+    return { emotion: "neutral", rest: emotionBuffer };
+  }
+
+  return null; // still accumulating
+}
+
 type ChatScreenProps = {
   onClose: () => void;
 };
@@ -15,7 +54,6 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [emotion, setEmotion] = useState<AvatarEmotion>("neutral");
   const [displayedCharCount, setDisplayedCharCount] = useState(0);
 
   // Two-layer crossfade for avatar emotion transitions
@@ -31,10 +69,21 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   const fullTextRef = useRef("");
   const revealTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Auto-scroll on new messages or revealed characters
+  const prevMessageCountRef = useRef(0);
+
+  // Auto-scroll smoothly only when a new message is appended
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, displayedCharCount]);
+    const hasNewMessage = messages.length > prevMessageCountRef.current;
+    if (hasNewMessage) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevMessageCountRef.current = messages.length;
+  }, [messages]);
+
+  // Keep the latest streaming text visible without restarting smooth scroll animations
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [displayedCharCount]);
 
   // Close on ESC key
   useEffect(() => {
@@ -61,7 +110,6 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   const updateEmotion = useCallback((next: AvatarEmotion) => {
     if (emotionRef.current === next) return;
     emotionRef.current = next;
-    setEmotion(next);
 
     if (showFirstRef.current) {
       setImg2Emotion(next);
@@ -124,25 +172,30 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
 
         if (!emotionExtracted) {
           emotionBuffer += chunk;
-          const closeIdx = emotionBuffer.indexOf("]");
-
-          if (closeIdx !== -1) {
-            const match = emotionBuffer.match(/^\[EMOTION:(\w+)\]/);
-            if (match) {
-              updateEmotion(match[1] as AvatarEmotion);
-              fullTextRef.current = emotionBuffer.slice(match[0].length);
-            } else {
-              updateEmotion("neutral");
-              fullTextRef.current = emotionBuffer;
-            }
-            emotionExtracted = true;
-          } else if (emotionBuffer.length > 50) {
-            updateEmotion("neutral");
-            fullTextRef.current = emotionBuffer;
+          const result = tryExtractEmotion(emotionBuffer);
+          if (result) {
+            updateEmotion(result.emotion);
+            fullTextRef.current = result.rest;
             emotionExtracted = true;
           }
         } else {
           fullTextRef.current += chunk;
+        }
+      }
+
+      // Flush any remaining bytes from the decoder (handles split multi-byte chars)
+      const finalChunk = decoder.decode();
+      if (finalChunk) {
+        if (!emotionExtracted) {
+          emotionBuffer += finalChunk;
+          const result = tryExtractEmotion(emotionBuffer);
+          if (result) {
+            updateEmotion(result.emotion);
+            fullTextRef.current = result.rest;
+            emotionExtracted = true;
+          }
+        } else {
+          fullTextRef.current += finalChunk;
         }
       }
 
@@ -164,33 +217,33 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         return updated;
       });
     } finally {
-      // Wait for reveal to finish, then clean up
-      await new Promise<void>((resolve) => {
-        const check = setInterval(() => {
-          setDisplayedCharCount((prev) => {
-            if (prev >= fullTextRef.current.length) {
-              clearInterval(check);
-              resolve();
-              return prev;
-            }
-            return prev + 1;
-          });
-        }, 30);
-      });
+      // On abort: just clean up timers and refs, skip all state updates
+      if (controller.signal.aborted) {
+        if (revealTimerRef.current) {
+          clearInterval(revealTimerRef.current);
+          revealTimerRef.current = null;
+        }
+        return;
+      }
 
+      // Stop the reveal timer and immediately show all text
       if (revealTimerRef.current) {
         clearInterval(revealTimerRef.current);
         revealTimerRef.current = null;
       }
+      setDisplayedCharCount(fullTextRef.current.length);
 
-      // Finalize the message with full text
-      setMessages((prev) => {
-        const updated = [...prev];
-        if (updated[updated.length - 1]?.role === "assistant") {
-          updated[updated.length - 1] = { role: "assistant", content: fullTextRef.current };
-        }
-        return updated;
-      });
+      // Finalize the message with full text only when streaming produced content.
+      // This avoids overwriting an error message set in catch with an empty string.
+      if (fullTextRef.current.length > 0) {
+        setMessages((prev) => {
+          const updated = [...prev];
+          if (updated[updated.length - 1]?.role === "assistant") {
+            updated[updated.length - 1] = { role: "assistant", content: fullTextRef.current };
+          }
+          return updated;
+        });
+      }
 
       // Fallback: reset to neutral if still thinking
       if (emotionRef.current === "thinking") {
@@ -291,7 +344,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
           />
           <img
             src={`/avatar/pat_${img2Emotion}.png`}
-            alt={emotion}
+            alt=""
             data-pixel
             className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
             style={{ opacity: showFirst ? 0 : 1 }}
