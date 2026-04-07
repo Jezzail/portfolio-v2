@@ -100,7 +100,23 @@
     "itemDescGlobaleur": "Plataforma de viajes — trabajé en el producto React whitelabel. El whitelabel original ya no está activo por circunstancias de la empresa.",
     "itemLinkNoteGlobaleur": "Landing corporativa — whitelabel ya no activo",
     "itemNameLocked": "[ SLOT BLOQUEADO ]",
-    "itemDescLocked": "???"
+    "itemDescLocked": "???",
+    "magazine": {
+      "name": "MISSED TRIGGER",
+      "description": "Revista de la comunidad MTG — 4 números, escrita y dirigida por Pablo. Artículos, entrevistas, cobertura de torneos, estrategia.",
+      "issue1": "NÚMERO 1",
+      "issue2": "NÚMERO 2",
+      "issue3": "NÚMERO 3",
+      "issue4": "NÚMERO 4",
+      "loading": "CARGANDO...",
+      "loadError": "ERROR DE CARGA",
+      "downloadFallback": "▶ DESCARGAR EN SU LUGAR",
+      "download": "▶ DESCARGAR",
+      "page": "PÁGINA",
+      "of": "/",
+      "prev": "◀ ANT",
+      "next": "SIG ▶"
+    }
   },
   "chat": {
     "title": "PREGUNTA A PABLO",

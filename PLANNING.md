@@ -95,6 +95,7 @@ messages/en.json             English translations (nav, title, stats, skills,   
                              quests, items, chat, hud sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
 data/                        Content data files for skills, quests, items            ✅ (data/skills.ts, data/quests.ts, data/items.ts)
+components/MagazineReader.tsx  Inline PDF reader for Missed Trigger magazine          ✅
 ```
 
 ## Open questions & decisions
@@ -234,3 +235,33 @@ See PortfolioScreen tab transitions decision above — full details there.
   malformed tag, or stream too short), emotion resets to `neutral` instead of staying
   stuck on `thinking`.
 - Auto-focus: input field regains focus automatically after each send/reply cycle completes.
+
+### MagazineReader / Missed Trigger (completed)
+- Uses `react-pdf` (v10) to render PDF pages in the browser via PDF.js.
+- react-pdf is dynamically imported via `next/dynamic` with `ssr: false` to avoid
+  the `DOMMatrix is not defined` error — PDF.js relies on browser APIs not available
+  during server-side rendering / static page generation.
+- PDF.js worker loaded from unpkg CDN: `pdfjs.GlobalWorkerOptions.workerSrc`
+  set to `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`.
+  Worker source is configured inside the dynamic import callback so it runs only client-side.
+- 4 magazine PDFs hosted on Vercel Blob (public URLs in `data/items.ts` as
+  `magazineIssues` array). `MagazineIssue` type in `types/index.ts`.
+- Full-screen modal pattern — MagazineReader renders as a fixed overlay at
+  `z-index: 10000` (above the CRT scanline overlay at `z-index: 9999`).
+  Modal is 90vw × 90vh, centered, with semi-transparent background backdrop.
+  Closes on Escape key or clicking outside the modal panel.
+- Issue selector buttons in ItemsSection replace the `▶ VIEW` link for magazine items.
+  Clicking an issue button opens the modal reader with that issue pre-selected.
+  Issue tabs inside the modal header allow switching issues without closing.
+- Mixed portrait/landscape orientation detection via `onLoadSuccess` callback:
+  `originalWidth > originalHeight` → landscape (full viewport width);
+  portrait → width computed from viewport height × 0.707 ratio to fit vertically.
+- Preset page counts per issue (16, 24, 20, 34) stored in `MagazineIssue.pages`
+  to avoid async page count fetch. Navigation bounded to [1, pages].
+- Error state: shows "LOAD FAILED" + download fallback link to the PDF URL.
+- `hasMagazineReader` boolean field on `Item` type controls which items
+  render the reader instead of a standard link button.
+- All UI strings via `useTranslations('items.magazine')` — i18n keys in
+  both en.json and es.json.
+- Item data keys use relative paths (e.g. `magazine.name`) since
+  `useTranslations('items')` already scopes to the `items` namespace.

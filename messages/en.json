@@ -100,7 +100,23 @@
     "itemDescGlobaleur": "Travel platform — worked on the React whitelabel product. Original whitelabel is down due to company circumstances.",
     "itemLinkNoteGlobaleur": "Company landing — whitelabel no longer live",
     "itemNameLocked": "[ SLOT LOCKED ]",
-    "itemDescLocked": "???"
+    "itemDescLocked": "???",
+    "magazine": {
+      "name": "MISSED TRIGGER",
+      "description": "MTG community magazine — 4 issues, written and directed by Pablo. Articles, interviews, tournament coverage, strategy.",
+      "issue1": "ISSUE 1",
+      "issue2": "ISSUE 2",
+      "issue3": "ISSUE 3",
+      "issue4": "ISSUE 4",
+      "loading": "LOADING...",
+      "loadError": "LOAD FAILED",
+      "downloadFallback": "▶ DOWNLOAD INSTEAD",
+      "download": "▶ DOWNLOAD",
+      "page": "PAGE",
+      "of": "/",
+      "prev": "◀ PREV",
+      "next": "NEXT ▶"
+    }
   },
   "chat": {
     "title": "ASK PABLO",

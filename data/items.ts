@@ -1,4 +1,4 @@
-import type { Item } from "@/types";
+import type { Item, MagazineIssue } from "@/types";
 
 export const items: Item[] = [
   {
@@ -28,10 +28,25 @@ export const items: Item[] = [
     linkNote: "itemLinkNoteGlobaleur",
   },
   {
+    id: "missed-trigger",
+    name: "magazine.name",
+    rarity: "rare",
+    description: "magazine.description",
+    tech: ["InDesign", "Photoshop", "MTG"],
+    hasMagazineReader: true,
+  },
+  {
     id: "locked",
     name: "itemNameLocked",
     rarity: "locked",
     description: "itemDescLocked",
     tech: [],
   },
+];
+
+export const magazineIssues: MagazineIssue[] = [
+  { issue: 1, pages: 16, url: 'https://bt2q38klkelqmgof.public.blob.vercel-storage.com/missed-trigger-1.pdf', labelKey: 'items.magazine.issue1' },
+  { issue: 2, pages: 24, url: 'https://bt2q38klkelqmgof.public.blob.vercel-storage.com/missed-trigger-2.pdf', labelKey: 'items.magazine.issue2' },
+  { issue: 3, pages: 20, url: 'https://bt2q38klkelqmgof.public.blob.vercel-storage.com/missed-trigger-3.pdf', labelKey: 'items.magazine.issue3' },
+  { issue: 4, pages: 34, url: 'https://bt2q38klkelqmgof.public.blob.vercel-storage.com/missed-trigger-4.pdf', labelKey: 'items.magazine.issue4' },
 ];
