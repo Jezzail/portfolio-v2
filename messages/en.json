@@ -115,7 +115,9 @@
       "page": "PAGE",
       "of": "/",
       "prev": "◀ PREV",
-      "next": "NEXT ▶"
+      "next": "NEXT ▶",
+      "close": "CLOSE",
+      "issueSelectorLabel": "SELECT ISSUE"
     }
   },
   "chat": {

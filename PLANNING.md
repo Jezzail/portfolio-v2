@@ -242,7 +242,7 @@ See PortfolioScreen tab transitions decision above — full details there.
   the `DOMMatrix is not defined` error — PDF.js relies on browser APIs not available
   during server-side rendering / static page generation.
 - PDF.js worker loaded from unpkg CDN: `pdfjs.GlobalWorkerOptions.workerSrc`
-  set to `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`.
+  set to `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`.
   Worker source is configured inside the dynamic import callback so it runs only client-side.
 - 4 magazine PDFs hosted on Vercel Blob (public URLs in `data/items.ts` as
   `magazineIssues` array). `MagazineIssue` type in `types/index.ts`.
@@ -253,9 +253,9 @@ See PortfolioScreen tab transitions decision above — full details there.
 - Issue selector buttons in ItemsSection replace the `▶ VIEW` link for magazine items.
   Clicking an issue button opens the modal reader with that issue pre-selected.
   Issue tabs inside the modal header allow switching issues without closing.
-- Mixed portrait/landscape orientation detection via `onLoadSuccess` callback:
-  `originalWidth > originalHeight` → landscape (full viewport width);
-  portrait → width computed from viewport height × 0.707 ratio to fit vertically.
+- Mixed portrait/landscape PDFs are sized using a general "contain" calculation
+  based on the page's original aspect ratio and the modal viewport constraints,
+  preserving aspect ratio while fitting each page within the available width/height.
 - Preset page counts per issue (16, 24, 20, 34) stored in `MagazineIssue.pages`
   to avoid async page count fetch. Navigation bounded to [1, pages].
 - Error state: shows "LOAD FAILED" + download fallback link to the PDF URL.
@@ -265,3 +265,5 @@ See PortfolioScreen tab transitions decision above — full details there.
   both en.json and es.json.
 - Item data keys use relative paths (e.g. `magazine.name`) since
   `useTranslations('items')` already scopes to the `items` namespace.
+  `magazineIssues[].labelKey` values are also stored as relative keys
+  (e.g. `issue1`) resolved via `useTranslations('items.magazine')`.

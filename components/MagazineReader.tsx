@@ -7,7 +7,7 @@ import type { MagazineIssue } from "@/types";
 
 const PDFDocument = dynamic(
   () => import("react-pdf").then((mod) => {
-    mod.pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${mod.pdfjs.version}/build/pdf.worker.min.mjs`;
+    mod.pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${mod.pdfjs.version}/build/pdf.worker.min.mjs`;
     return { default: mod.Document };
   }),
   { ssr: false },
@@ -108,24 +108,24 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-background/90"
-      style={{ zIndex: 10000 }}
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-background/90"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
       role="dialog"
       aria-modal="true"
     >
       {/* Modal container: 90% of screen */}
       <div
-        className="flex flex-col border-2 border-border bg-surface"
-        style={{ width: "90vw", height: "90vh" }}
+        className="flex h-[90vh] w-[90vw] flex-col border-2 border-border bg-surface"
       >
         {/* Header: issue tabs + close button */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-border p-3">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("issueSelectorLabel")}>
             {issues.map((iss, idx) => (
               <button
                 key={iss.issue}
                 type="button"
+                role="tab"
+                aria-selected={idx === activeIssue}
                 onClick={() => handleIssueChange(idx)}
                 className={`border-2 px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
                   idx === activeIssue
@@ -133,13 +133,14 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
                     : "border-border text-text-muted hover:border-border-active"
                 }`}
               >
-                {t(iss.labelKey.replace("items.magazine.", ""))}
+                {t(iss.labelKey)}
               </button>
             ))}
           </div>
           <button
             type="button"
             onClick={onClose}
+            aria-label={t("close")}
             className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
           >
             ✕

@@ -115,7 +115,9 @@
       "page": "PÁGINA",
       "of": "/",
       "prev": "◀ ANT",
-      "next": "SIG ▶"
+      "next": "SIG ▶",
+      "close": "CERRAR",
+      "issueSelectorLabel": "SELECCIONAR NÚMERO"
     }
   },
   "chat": {

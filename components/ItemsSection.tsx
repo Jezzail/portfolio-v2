@@ -113,7 +113,7 @@ export function ItemsSection() {
                       }}
                       className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
                     >
-                      {tMag(iss.labelKey.replace("items.magazine.", ""))}
+                      {tMag(iss.labelKey)}
                     </button>
                   ))}
                 </div>
