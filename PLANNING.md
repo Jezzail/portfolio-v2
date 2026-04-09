@@ -96,6 +96,13 @@ messages/en.json             English translations (nav, title, stats, skills,   
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
 data/                        Content data files for skills, quests, items            ✅ (data/skills.ts, data/quests.ts, data/items.ts)
 components/MagazineReader.tsx  Inline PDF reader for Missed Trigger magazine          ✅
+lib/emotion.ts               Emotion tag parser utility (extracted from ChatScreen) ✅
+vitest.config.ts             Vitest config (jsdom env, path aliases, setup file)    ✅
+playwright.config.ts         Playwright config (chromium, localhost:3000)           ✅
+__tests__/setup.ts           Vitest global setup (next-intl, framer-motion mocks)  ✅
+__tests__/unit/              Unit tests (TitleScreen, Skills, Quests, Stats, emotion) ✅
+__tests__/integration/       Integration tests (chat API, tab nav, lang toggle)      ✅
+e2e/                         E2E tests (full flow, tab flow, ask pablo)              ✅
 ```
 
 ## Open questions & decisions
@@ -267,3 +274,44 @@ See PortfolioScreen tab transitions decision above — full details there.
   `useTranslations('items')` already scopes to the `items` namespace.
   `magazineIssues[].labelKey` values are also stored as relative keys
   (e.g. `issue1`) resolved via `useTranslations('items.magazine')`.
+
+### Testing suite (completed)
+- **Stack**: Vitest + React Testing Library (unit/integration), Playwright (E2E).
+  Jest is NOT used — Vitest was chosen for native ESM, TypeScript, and Vite compatibility.
+- **Emotion parser extraction**: `tryExtractEmotion` and `isValidEmotion` were extracted
+  from `ChatScreen.tsx` into `lib/emotion.ts` to enable standalone unit testing.
+  ChatScreen now imports from `lib/emotion.ts`.
+- **Vitest config** (`vitest.config.ts`): jsdom environment, `@vitejs/plugin-react` for JSX,
+  `@/` path alias, setup file at `__tests__/setup.ts`.
+- **Test setup** (`__tests__/setup.ts`): Mocks `next-intl` (loads real en.json translations),
+  `next/navigation` (router stubs), and `framer-motion` (motion.* → plain HTML elements,
+  AnimatePresence → passthrough). Uses `@testing-library/jest-dom/vitest` for matchers.
+- **Playwright config** (`playwright.config.ts`): Chromium only, targets localhost:3000,
+  auto-starts `npm run dev` via `webServer`, retries 2× in CI.
+
+#### Unit tests (`__tests__/unit/`)
+- `TitleScreen.test.tsx` — PRESS START renders, save slot text (LV 37, role, location), click calls onStart.
+- `SkillsSection.test.tsx` — all 14 skills render by name, XP bars present, level numbers present.
+- `QuestsSection.test.tsx` — company names, section title, status badges, translated roles.
+- `StatsSection.test.tsx` — GitHub/LinkedIn/Email links with correct hrefs, section title, name/class.
+- `emotion-parser.test.ts` — tag extraction, all 12 valid emotions, malformed/missing tags, buffer overflow.
+
+#### Integration tests (`__tests__/integration/`)
+- `chat-api.test.ts` — POST /api/chat returns 400 for missing/empty/invalid messages; returns streaming
+  response with emotion tag for valid input. Anthropic SDK and fs are mocked.
+- `tab-navigation.test.tsx` — clicking STATS/SKILLS/QUESTS/ITEMS tabs renders correct section heading;
+  ASK PABLO button calls onOpenChat callback.
+- `language-toggle.test.tsx` — EN active by default, clicking toggle sets `locale=es` cookie and calls
+  router.refresh(), Spanish messages file has matching keys.
+
+#### E2E tests (`e2e/`)
+- `full-flow.spec.ts` — land on TitleScreen → click PRESS START → PortfolioScreen with CHARACTER STATS.
+- `tab-flow.spec.ts` — navigate past title, click all 4 tabs + ASK PABLO, assert section headings visible.
+- `ask-pablo.spec.ts` — intercept /api/chat with mock response, open chat, send message, assert reply appears.
+
+#### Scripts & CI
+- `package.json` scripts: `test:unit`, `test:integration`, `test:e2e`, `test:all`.
+- Husky `pre-push` hook: runs `type-check` + `test:unit` + `test:integration` (fast, no E2E).
+- GitHub Actions CI (`ci.yml`): `check` job now runs unit + integration tests after lint/type-check.
+  New `e2e` job (push-only) installs Playwright, builds, and runs E2E tests.
+- `tsconfig.json`: `__tests__/` and `e2e/` excluded from `tsc --noEmit` to avoid Vitest global conflicts.

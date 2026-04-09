@@ -40,6 +40,12 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Integration tests
+        run: npm run test:integration
+
   build:
     name: Build (push only)
     if: github.event_name == 'push'
@@ -60,3 +66,32 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  e2e:
+    name: E2E Tests (push only)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Build
+        run: npm run build
+
+      - name: Run E2E tests
+        run: npx playwright test
+        env:
+          CI: true
