@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { items } from "@/data/items";
+import { items, magazineIssues } from "@/data/items";
+import { MagazineReader } from "@/components/MagazineReader";
 import type { ItemRarity } from "@/types";
 
 function assertNever(x: never): never {
@@ -36,6 +38,9 @@ function nameColorClass(rarity: ItemRarity): string {
 
 export function ItemsSection() {
   const t = useTranslations("items");
+  const tMag = useTranslations("items.magazine");
+  const [readerOpen, setReaderOpen] = useState(false);
+  const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
 
   return (
     <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
@@ -95,8 +100,27 @@ export function ItemsSection() {
                 </div>
               )}
 
+              {/* Magazine issue selector (replaces VIEW button) */}
+              {item.hasMagazineReader && (
+                <div className="flex flex-wrap gap-2">
+                  {magazineIssues.map((iss, idx) => (
+                    <button
+                      key={iss.issue}
+                      type="button"
+                      onClick={() => {
+                        setSelectedIssueIndex(idx);
+                        setReaderOpen(true);
+                      }}
+                      className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
+                    >
+                      {tMag(iss.labelKey)}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* Link button + note */}
-              {item.link && (
+              {item.link && !item.hasMagazineReader && (
                 <div className="space-y-1">
                   <a
                     href={item.link}
@@ -117,6 +141,15 @@ export function ItemsSection() {
           );
         })}
       </div>
+
+      {/* Magazine reader modal */}
+      {readerOpen && (
+        <MagazineReader
+          issues={magazineIssues}
+          initialIssueIndex={selectedIssueIndex}
+          onClose={() => setReaderOpen(false)}
+        />
+      )}
     </section>
   );
 }

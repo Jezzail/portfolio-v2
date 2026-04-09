@@ -57,4 +57,12 @@ export type Item = {
   tech: string[];
   link?: string;
   linkNote?: string;
+  hasMagazineReader?: boolean;
+};
+
+export type MagazineIssue = {
+  issue: number;
+  pages: number;
+  url: string;
+  labelKey: string;
 };
