@@ -22,10 +22,7 @@ describe("StatsSection", () => {
     render(<StatsSection />);
     const link = screen.getByRole("link", { name: /LinkedIn/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute(
-      "href",
-      "https://linkedin.com/in/pabloabril/"
-    );
+    expect(link).toHaveAttribute("href", "https://linkedin.com/in/pabloabril/");
   });
 
   it("renders Email contact link", () => {

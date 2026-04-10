@@ -46,8 +46,6 @@ test.describe("Tab flow", () => {
       timeout: 5000,
     });
     // Chat input should be present
-    await expect(
-      page.getByPlaceholder(/type your question/i)
-    ).toBeVisible();
+    await expect(page.getByPlaceholder(/type your question/i)).toBeVisible();
   });
 });

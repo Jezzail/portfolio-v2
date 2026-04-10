@@ -1,24 +1,28 @@
 # Pablo Abril — Portfolio Project
 
 ## Who I am
+
 Senior Frontend / React Native Engineer. Spanish, based in Seoul, South Korea.
-10+ years experience. Currently sole FE engineer on TABA, a live React Native 
+10+ years experience. Currently sole FE engineer on TABA, a live React Native
 taxi app with 60,000+ downloads. Looking for Senior Frontend or Tech Lead roles.
 Born 1988. Gamer since the 8-bit era. Design-minded developer.
 
 ## What this project is
-Personal portfolio at patportfolio.dev — built with Next.js 16 App Router, 
+
+Personal portfolio at patportfolio.dev — built with Next.js 16 App Router,
 TypeScript, Tailwind CSS, Framer Motion, next-intl. Deployed on Vercel.
 
-Key feature: "Ask Pablo" — AI chat widget using Anthropic API 
-(claude-sonnet-4-20250514) that answers questions about me using 
+Key feature: "Ask Pablo" — AI chat widget using Anthropic API
+(claude-sonnet-4-20250514) that answers questions about me using
 pablo-context.md as its knowledge base.
 
 ## Visual design
-Retro RPG / 16-bit game aesthetic. Think SNES save screen meets character 
+
+Retro RPG / 16-bit game aesthetic. Think SNES save screen meets character
 sheet. Reference: joe8lee.com for personality, but retro game execution.
 
 Design tokens (use these EXACTLY, never deviate):
+
 - Background: #0a0a1a
 - Surface: #0e0e28
 - Border: #2a2a5a
@@ -41,16 +45,19 @@ The current template code (e.g., usage of `rounded-full` and Geist/Arial in `app
 When modifying or adding UI code, do **not** assume the existing styles already conform; instead, avoid introducing new deviations and, where practical, refactor touched areas toward these target constraints without breaking existing layout/behavior.
 
 ## Architecture — CRITICAL, read carefully
+
 Target architecture: this should be a SINGLE PAGE APP. No routing, no navigation between pages.
-The goal is for the entire portfolio to live in one page (app/page.tsx), with React state controlling 
+The goal is for the entire portfolio to live in one page (app/page.tsx), with React state controlling
 which "screen" is visible instead of using multiple routes.
 
 When implementing or refactoring app/page.tsx, follow this target flow with three screens, all rendered in the DOM with visibility controlled by state:
+
 1. TitleScreen — game title screen with save slot and PRESS START
 2. PortfolioScreen — the main portfolio, tabbed RPG menu
 3. ChatScreen — the Ask Pablo AI chat (opens as overlay on top of the portfolio)
 
 Tabs in PortfolioScreen (these are the section names, keep them):
+
 - STATS → about me, bio, personal info
 - SKILLS → tech skills as RPG XP bars with LVL numbers
 - QUESTS → work experience as completed quests
@@ -58,6 +65,7 @@ Tabs in PortfolioScreen (these are the section names, keep them):
 - ASK PABLO → opens ChatScreen overlay
 
 ## Avatar emotion system
+
 The chat API uses an emotion-tag protocol. Claude is instructed via system prompt
 to begin every response with `[EMOTION:X]` where X is one of:
 neutral | happy | thinking | sad | surprised | confused | confident |
@@ -71,20 +79,23 @@ Avatar PNGs: `public/avatar/pat_{emotion}.png` (12 files, image-rendering: pixel
 `AvatarEmotion` type is defined in `types/index.ts`.
 
 ## i18n
+
 next-intl handles English / Spanish. All user-facing strings live in:
-- messages/en.json  ← exists, add new keys here
-- messages/es.json  ← exists, mirror every key with Spanish translation
-Language toggle in the HUD — EN / ES pill toggle.
-NEVER hardcode user-facing strings in components. Always use useTranslations().
-When adding a new UI string, add it to BOTH files before using it in a component.
+
+- messages/en.json ← exists, add new keys here
+- messages/es.json ← exists, mirror every key with Spanish translation
+  Language toggle in the HUD — EN / ES pill toggle.
+  NEVER hardcode user-facing strings in components. Always use useTranslations().
+  When adding a new UI string, add it to BOTH files before using it in a component.
 
 ## Code conventions — NON NEGOTIABLE
+
 - App Router only. Never use Pages Router patterns.
-- Server components by default. Add "use client" only when component needs 
+- Server components by default. Add "use client" only when component needs
   useState, useEffect, event handlers, or Framer Motion.
-- One component per file. Named exports only, no default exports except 
+- One component per file. Named exports only, no default exports except
   for page.tsx and layout.tsx.
-- Tailwind for all styling. No CSS modules. No inline style= except for 
+- Tailwind for all styling. No CSS modules. No inline style= except for
   dynamic values that Tailwind cannot handle.
 - All API routes in app/api/
 - All components in components/
@@ -93,10 +104,12 @@ When adding a new UI string, add it to BOTH files before using it in a component
 - No any in TypeScript. Strict mode is on.
 
 ## Environment variables
+
 ANTHROPIC_API_KEY — never expose client side, only used in API routes.
 Add to .env.local (already in .gitignore), never commit it.
 
 ## What to never do
+
 - Never use Pages Router
 - Never use react-helmet (use Next.js Metadata API)
 - Never add border-radius

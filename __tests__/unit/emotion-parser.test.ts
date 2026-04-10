@@ -43,8 +43,18 @@ describe("tryExtractEmotion", () => {
 
   it("handles all 12 valid emotions", () => {
     const emotions = [
-      "neutral", "happy", "thinking", "sad", "surprised", "confused",
-      "confident", "laughing", "focused", "embarrassed", "explaining", "error",
+      "neutral",
+      "happy",
+      "thinking",
+      "sad",
+      "surprised",
+      "confused",
+      "confident",
+      "laughing",
+      "focused",
+      "embarrassed",
+      "explaining",
+      "error",
     ];
 
     for (const emotion of emotions) {

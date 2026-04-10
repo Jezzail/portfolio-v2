@@ -4,7 +4,10 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 // Load pablo-context.md once at module init — single source of truth for the knowledge base.
-const pabloContext = readFileSync(join(process.cwd(), "pablo-context.md"), "utf-8");
+const pabloContext = readFileSync(
+  join(process.cwd(), "pablo-context.md"),
+  "utf-8",
+);
 
 const SYSTEM_PROMPT = `You are Pablo Abril. You speak in first person — you ARE Pablo, not an assistant describing him. Use the knowledge base below to answer questions about yourself.
 
@@ -69,7 +72,7 @@ function isValidBody(body: unknown): body is ChatRequestBody {
       "content" in m &&
       typeof (m as Record<string, unknown>).content === "string" &&
       ((m as Record<string, unknown>).role === "user" ||
-        (m as Record<string, unknown>).role === "assistant")
+        (m as Record<string, unknown>).role === "assistant"),
   );
 }
 
@@ -84,7 +87,7 @@ export async function POST(request: NextRequest) {
   if (!checkRateLimit(ip, effectiveLimit)) {
     return NextResponse.json(
       { error: "Too many requests. Please try again later." },
-      { status: 429 }
+      { status: 429 },
     );
   }
 
@@ -92,7 +95,7 @@ export async function POST(request: NextRequest) {
   if (!apiKey) {
     return NextResponse.json(
       { error: "Server configuration error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -102,14 +105,14 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Invalid JSON payload" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!isValidBody(body)) {
     return NextResponse.json(
       { error: "Invalid request body: messages array is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -127,7 +130,7 @@ export async function POST(request: NextRequest) {
         })),
         stream: true,
       },
-      { signal: request.signal }
+      { signal: request.signal },
     );
 
     const { readable, writable } = new TransformStream<Uint8Array>();
@@ -148,7 +151,9 @@ export async function POST(request: NextRequest) {
       } catch {
         if (!request.signal.aborted) {
           await writer.write(
-            encoder.encode("[EMOTION:error]Something went wrong. Please try again.")
+            encoder.encode(
+              "[EMOTION:error]Something went wrong. Please try again.",
+            ),
           );
         }
       } finally {
@@ -165,7 +170,7 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Failed to generate response" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

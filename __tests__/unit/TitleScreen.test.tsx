@@ -32,7 +32,7 @@ describe("TitleScreen", () => {
     const onStart = vi.fn();
     render(<TitleScreen onStart={onStart} />);
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: /press start/i });
     await button.click();
     expect(onStart).toHaveBeenCalledOnce();
   });

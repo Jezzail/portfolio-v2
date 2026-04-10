@@ -25,7 +25,7 @@ describe("SkillsSection", () => {
 
     // Each skill row has a bar container (border-2 border-border with an inner fill div)
     const barContainers = container.querySelectorAll(
-      ".border-2.border-border.overflow-hidden"
+      ".border-2.border-border.overflow-hidden",
     );
     expect(barContainers.length).toBe(skills.length);
   });

@@ -44,18 +44,24 @@ describe("Language toggle", () => {
     render(<HudBar />);
 
     // The toggle button shows EN / ES — EN should be gold (active)
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button.textContent).toContain("EN");
-    expect(button.textContent).toContain("ES");
+    const buttons = screen.getAllByRole("button");
+    const langButton = buttons.find(
+      (b) => b.textContent?.includes("EN") && b.textContent?.includes("ES"),
+    )!;
+    expect(langButton).toBeInTheDocument();
+    expect(langButton.textContent).toContain("EN");
+    expect(langButton.textContent).toContain("ES");
   });
 
   it("sets locale cookie to 'es' and calls router.refresh on click", async () => {
     const user = userEvent.setup();
     render(<HudBar />);
 
-    const button = screen.getByRole("button");
-    await user.click(button);
+    const buttons = screen.getAllByRole("button");
+    const langButton = buttons.find(
+      (b) => b.textContent?.includes("EN") && b.textContent?.includes("ES"),
+    )!;
+    await user.click(langButton);
 
     expect(document.cookie).toContain("locale=es");
     expect(mockRefresh).toHaveBeenCalledOnce();

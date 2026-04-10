@@ -13,12 +13,10 @@ import en from "../messages/en.json";
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
-function getNestedValue(
-  obj: Record<string, unknown>,
-  path: string
-): unknown {
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
   return path.split(".").reduce<unknown>((acc, key) => {
-    if (acc && typeof acc === "object") return (acc as Record<string, unknown>)[key];
+    if (acc && typeof acc === "object")
+      return (acc as Record<string, unknown>)[key];
     return undefined;
   }, obj);
 }
@@ -66,7 +64,7 @@ vi.mock("framer-motion", () => {
       get(_target, prop: string) {
         return React.forwardRef(function MotionMock(
           props: Record<string, unknown>,
-          ref: React.Ref<HTMLElement>
+          ref: React.Ref<HTMLElement>,
         ) {
           // Strip framer-motion-specific props before passing to DOM
           const {
@@ -86,7 +84,7 @@ vi.mock("framer-motion", () => {
           return React.createElement(prop, { ...domProps, ref });
         });
       },
-    }
+    },
   );
 
   return {

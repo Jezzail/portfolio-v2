@@ -1,8 +1,18 @@
 import type { AvatarEmotion } from "@/types";
 
 const VALID_EMOTIONS: readonly AvatarEmotion[] = [
-  "neutral", "happy", "thinking", "sad", "surprised", "confused",
-  "confident", "laughing", "focused", "embarrassed", "explaining", "error",
+  "neutral",
+  "happy",
+  "thinking",
+  "sad",
+  "surprised",
+  "confused",
+  "confident",
+  "laughing",
+  "focused",
+  "embarrassed",
+  "explaining",
+  "error",
 ] as const;
 
 export function isValidEmotion(candidate: string): candidate is AvatarEmotion {
@@ -15,7 +25,7 @@ export function isValidEmotion(candidate: string): candidate is AvatarEmotion {
  * isn't complete yet (no closing ']' found and buffer is under 50 chars).
  */
 export function tryExtractEmotion(
-  emotionBuffer: string
+  emotionBuffer: string,
 ): { emotion: AvatarEmotion; rest: string } | null {
   const closeIdx = emotionBuffer.indexOf("]");
 

@@ -97,7 +97,7 @@ describe("/api/chat POST", () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get("Content-Type")).toBe(
-      "text/plain; charset=utf-8"
+      "text/plain; charset=utf-8",
     );
 
     // Read the streamed body

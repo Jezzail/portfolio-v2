@@ -8,11 +8,7 @@ export const quests: Quest[] = [
     start: "2024.12",
     location: "Seoul, KR",
     status: "current",
-    objectives: [
-      "questObjTaba",
-      "questObjSoleFe",
-      "questObj80Tasks",
-    ],
+    objectives: ["questObjTaba", "questObjSoleFe", "questObj80Tasks"],
   },
   {
     id: "globaleur-lead",
@@ -22,11 +18,7 @@ export const quests: Quest[] = [
     end: "2024.12",
     location: "Seoul, KR",
     status: "completed",
-    objectives: [
-      "questObjLed8",
-      "questObjSprints",
-      "questObjMentoring",
-    ],
+    objectives: ["questObjLed8", "questObjSprints", "questObjMentoring"],
   },
   {
     id: "knapp",
@@ -50,9 +42,6 @@ export const quests: Quest[] = [
     end: "2017.06",
     location: "Almería, ES",
     status: "completed",
-    objectives: [
-      "questObjInternalApps",
-      "questObjIntranet",
-    ],
+    objectives: ["questObjInternalApps", "questObjIntranet"],
   },
 ];

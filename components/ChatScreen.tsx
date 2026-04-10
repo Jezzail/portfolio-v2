@@ -172,7 +172,10 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
       setMessages((prev) => {
         const updated = [...prev];
         if (updated[updated.length - 1]?.role === "assistant") {
-          updated[updated.length - 1] = { role: "assistant", content: t("error") };
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: t("error"),
+          };
         } else {
           updated.push({ role: "assistant", content: t("error") });
         }
@@ -201,7 +204,10 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         setMessages((prev) => {
           const updated = [...prev];
           if (updated[updated.length - 1]?.role === "assistant") {
-            updated[updated.length - 1] = { role: "assistant", content: fullTextRef.current };
+            updated[updated.length - 1] = {
+              role: "assistant",
+              content: fullTextRef.current,
+            };
           }
           return updated;
         });
@@ -223,12 +229,12 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
       <div className="flex flex-1 flex-col p-4 md:p-6">
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-border pb-3 mb-4">
-          <h2 className="text-[10px] md:text-xs text-accent-gold">
+          <h2 className="text-sm md:text-base text-accent-gold">
             {t("title")}
           </h2>
           <button
             onClick={onClose}
-            className="border-2 border-border px-2 py-1 text-[10px] text-text-muted hover:border-border-active hover:text-accent-gold"
+            className="border-2 border-border px-2 py-1 text-sm text-text-muted hover:border-border-active hover:text-accent-gold"
             aria-label={t("close")}
           >
             ×
@@ -240,14 +246,14 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`border-2 p-3 text-[8px] md:text-[10px] leading-relaxed ${
+              className={`border-2 p-3 text-xs md:text-sm leading-relaxed ${
                 msg.role === "assistant"
                   ? "border-border-active"
                   : "border-border"
               }`}
             >
               <span
-                className={`block mb-1 text-[7px] md:text-[8px] ${
+                className={`block mb-1 text-xs ${
                   msg.role === "assistant"
                     ? "text-accent-gold"
                     : "text-text-muted"
@@ -256,8 +262,8 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
                 ▶ {msg.role === "assistant" ? t("pablo") : t("you")}
               </span>
               {isStreaming &&
-                i === messages.length - 1 &&
-                msg.role === "assistant"
+              i === messages.length - 1 &&
+              msg.role === "assistant"
                 ? fullTextRef.current.slice(0, displayedCharCount)
                 : msg.content}
               {isStreaming &&
@@ -282,12 +288,12 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
             }}
             placeholder={t("placeholder")}
             disabled={isStreaming}
-            className="flex-1 bg-surface border-2 border-border px-3 py-2 text-[8px] md:text-[10px] text-text-primary placeholder:text-text-dim focus:border-border-active focus:outline-none disabled:opacity-50"
+            className="flex-1 bg-surface border-2 border-border px-3 py-2 text-xs md:text-sm text-text-primary placeholder:text-text-dim focus:border-border-active focus:outline-none disabled:opacity-50"
           />
           <button
             onClick={handleSend}
             disabled={isStreaming || !input.trim()}
-            className="border-2 border-border-active bg-surface px-3 py-2 text-[8px] md:text-[10px] text-accent-gold hover:bg-background disabled:opacity-50 disabled:border-border disabled:text-text-dim"
+            className="border-2 border-border-active bg-surface px-3 py-2 text-xs md:text-sm text-accent-gold hover:bg-background disabled:opacity-50 disabled:border-border disabled:text-text-dim"
           >
             {isStreaming ? t("thinking") : t("send")}
           </button>
@@ -312,8 +318,8 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
             style={{ opacity: showFirst ? 0 : 1 }}
           />
         </div>
-        <p className="text-[10px] text-accent-gold mb-1">▶ {tHud("name")}</p>
-        <p className="text-[8px] text-text-muted">{tHud("level")}</p>
+        <p className="text-sm text-accent-gold mb-1">▶ {tHud("name")}</p>
+        <p className="text-xs text-text-muted">{tHud("level")}</p>
       </div>
     </div>
   );
