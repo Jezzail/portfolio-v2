@@ -81,6 +81,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
 
       {/* ── Press Start ── */}
       <button
+        type="button"
         onClick={onStart}
         className="text-text-primary text-sm sm:text-base animate-blink tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
       >

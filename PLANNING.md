@@ -405,5 +405,5 @@ See PortfolioScreen tab transitions decision above — full details there.
   HudBar: full-width background with inner content constrained to the same max-width.
   CRT overlay and background remain full-bleed. ChatScreen unaffected (fixed overlay).
 - **i18n keys added**: `hud.dark` / `hud.light` in both en.json and es.json.
-- **New dev dependency**: `prettier` added for code formatting; `format` / `format:check` scripts
+- **New dev dependency**: `Prettier` added for code formatting; `format` / `format:check` scripts
   wired into lint-staged and CI.
