@@ -45,7 +45,7 @@ export function ItemsSection() {
   return (
     <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
       {/* Section title */}
-      <h2 className="text-accent-gold text-[10px] sm:text-xs tracking-wide">
+      <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─
       </h2>
 
@@ -58,20 +58,18 @@ export function ItemsSection() {
             <div
               key={item.id}
               className={`border-2 p-4 sm:p-5 space-y-3 ${
-                isLocked
-                  ? "border-text-dim opacity-50"
-                  : "border-border"
+                isLocked ? "border-text-dim opacity-50" : "border-border"
               }`}
             >
               {/* Name + rarity badge */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3
-                  className={`text-[9px] sm:text-[10px] tracking-wide ${nameColorClass(item.rarity)}`}
+                  className={`text-xs sm:text-sm tracking-wide ${nameColorClass(item.rarity)}`}
                 >
                   {t(item.name)}
                 </h3>
                 <span
-                  className={`border-2 px-2 py-1 text-[6px] sm:text-[7px] tracking-wide ${rarityColorClass(item.rarity)}`}
+                  className={`border-2 px-2 py-1 text-2xs sm:text-xs tracking-wide ${rarityColorClass(item.rarity)}`}
                 >
                   {t(RARITY_I18N[item.rarity])}
                 </span>
@@ -79,7 +77,7 @@ export function ItemsSection() {
 
               {/* Description */}
               <p
-                className={`text-[7px] sm:text-[8px] leading-relaxed ${
+                className={`text-xs leading-relaxed ${
                   isLocked ? "text-text-dim" : "text-text-primary"
                 }`}
               >
@@ -92,7 +90,7 @@ export function ItemsSection() {
                   {item.tech.map((tag) => (
                     <span
                       key={tag}
-                      className="border-2 border-border px-2 py-1 text-[6px] sm:text-[7px] text-text-muted tracking-wide"
+                      className="border-2 border-border px-2 py-1 text-2xs sm:text-xs text-text-muted tracking-wide"
                     >
                       {tag}
                     </span>
@@ -111,7 +109,7 @@ export function ItemsSection() {
                         setSelectedIssueIndex(idx);
                         setReaderOpen(true);
                       }}
-                      className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
+                      className="border-2 border-border px-3 py-2 text-xs text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
                     >
                       {tMag(iss.labelKey)}
                     </button>
@@ -126,12 +124,13 @@ export function ItemsSection() {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-accent-gold tracking-wide hover:border-border-active transition-colors"
+                    className="inline-block border-2 border-border px-3 py-2 text-xs text-accent-gold tracking-wide hover:border-border-active transition-colors"
                   >
-                    <span aria-hidden="true">▶ </span>{t("viewProject")}
+                    <span aria-hidden="true">▶ </span>
+                    {t("viewProject")}
                   </a>
                   {item.linkNote && (
-                    <p className="text-text-muted text-[6px] sm:text-[7px]">
+                    <p className="text-text-muted text-2xs sm:text-xs">
                       {t(item.linkNote)}
                     </p>
                   )}

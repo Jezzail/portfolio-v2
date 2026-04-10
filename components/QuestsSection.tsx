@@ -34,7 +34,7 @@ export function QuestsSection() {
   return (
     <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
       {/* Section title */}
-      <h2 className="text-accent-gold text-[10px] sm:text-xs tracking-wide">
+      <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─
       </h2>
 
@@ -46,7 +46,7 @@ export function QuestsSection() {
             type="button"
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
-            className={`border-2 px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
+            className={`border-2 px-3 py-2 text-xs tracking-wide transition-colors ${
               filter === f
                 ? "border-border-active text-accent-gold"
                 : "border-border text-text-muted hover:text-text-primary"
@@ -60,33 +60,36 @@ export function QuestsSection() {
       {/* Quest cards */}
       <div className="space-y-4">
         {filtered.map((quest) => (
-          <div key={quest.id} className="border-2 border-border p-4 sm:p-5 space-y-3">
+          <div
+            key={quest.id}
+            className="border-2 border-border p-4 sm:p-5 space-y-3"
+          >
             {/* Company + status badge */}
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-accent-gold text-[9px] sm:text-[10px] tracking-wide">
+              <h3 className="text-accent-gold text-xs sm:text-sm tracking-wide">
                 {quest.company}
               </h3>
               <span
-                className={`border-2 px-2 py-1 text-[6px] sm:text-[7px] tracking-wide ${statusColorClass(quest.status)}`}
+                className={`border-2 px-2 py-1 text-2xs sm:text-xs tracking-wide ${statusColorClass(quest.status)}`}
               >
                 {t(STATUS_I18N[quest.status])}
               </span>
             </div>
 
             {/* Role */}
-            <p className="text-text-primary text-[8px] sm:text-[9px]">
+            <p className="text-text-primary text-xs sm:text-sm">
               {t(quest.role)}
             </p>
 
             {/* Period · Location */}
-            <p className="text-text-muted text-[7px] sm:text-[8px]">
+            <p className="text-text-muted text-xs">
               {quest.start} – {quest.end ?? t("present")} · {quest.location}
             </p>
 
             {/* Objectives */}
             <ul className="space-y-1">
               {quest.objectives.map((obj) => (
-                <li key={obj} className="text-text-primary text-[7px] sm:text-[8px]">
+                <li key={obj} className="text-text-primary text-xs">
                   ▶ {t(obj)}
                 </li>
               ))}

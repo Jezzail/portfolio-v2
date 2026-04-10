@@ -6,10 +6,11 @@ import { useTranslations } from "next-intl";
 import type { MagazineIssue } from "@/types";
 
 const PDFDocument = dynamic(
-  () => import("react-pdf").then((mod) => {
-    mod.pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${mod.pdfjs.version}/build/pdf.worker.min.mjs`;
-    return { default: mod.Document };
-  }),
+  () =>
+    import("react-pdf").then((mod) => {
+      mod.pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${mod.pdfjs.version}/build/pdf.worker.min.mjs`;
+      return { default: mod.Document };
+    }),
   { ssr: false },
 );
 
@@ -24,7 +25,11 @@ type MagazineReaderProps = {
   onClose: () => void;
 };
 
-export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: MagazineReaderProps) {
+export function MagazineReader({
+  issues,
+  initialIssueIndex = 0,
+  onClose,
+}: MagazineReaderProps) {
   const t = useTranslations("items.magazine");
   const [activeIssue, setActiveIssue] = useState(initialIssueIndex);
   const [currentPage, setCurrentPage] = useState(1);
@@ -108,18 +113,22 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
 
   return (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-background/90"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-10000 flex items-center justify-center bg-background/90"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       role="dialog"
       aria-modal="true"
     >
       {/* Modal container: 90% of screen */}
-      <div
-        className="flex h-[90vh] w-[90vw] flex-col border-2 border-border bg-surface"
-      >
+      <div className="flex h-[90vh] w-[90vw] flex-col border-2 border-border bg-surface">
         {/* Header: issue tabs + close button */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-border p-3">
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("issueSelectorLabel")}>
+          <div
+            className="flex flex-wrap gap-2"
+            role="tablist"
+            aria-label={t("issueSelectorLabel")}
+          >
             {issues.map((iss, idx) => (
               <button
                 key={iss.issue}
@@ -127,7 +136,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
                 role="tab"
                 aria-selected={idx === activeIssue}
                 onClick={() => handleIssueChange(idx)}
-                className={`border-2 px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
+                className={`border-2 px-3 py-2 text-xs tracking-wide transition-colors ${
                   idx === activeIssue
                     ? "border-border-active text-accent-gold"
                     : "border-border text-text-muted hover:border-border-active"
@@ -141,7 +150,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
             type="button"
             onClick={onClose}
             aria-label={t("close")}
-            className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
+            className="border-2 border-border px-3 py-2 text-xs text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
           >
             ✕
           </button>
@@ -154,14 +163,14 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
         >
           {loadError ? (
             <div className="flex flex-col items-center gap-3 p-6">
-              <p className="text-text-muted text-[8px] sm:text-[9px] tracking-wide">
+              <p className="text-text-muted text-xs sm:text-sm tracking-wide">
                 {t("loadError")}
               </p>
               <a
                 href={issue.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-accent-gold tracking-wide hover:border-border-active transition-colors"
+                className="border-2 border-border px-3 py-2 text-xs text-accent-gold tracking-wide hover:border-border-active transition-colors"
               >
                 {t("downloadFallback")}
               </a>
@@ -170,7 +179,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
             <div className="relative flex items-center justify-center">
               {pageLoading && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
-                  <p className="text-text-muted text-[8px] sm:text-[9px] tracking-wide animate-blink">
+                  <p className="text-text-muted text-xs sm:text-sm tracking-wide animate-blink">
                     {t("loading")}
                   </p>
                 </div>
@@ -203,7 +212,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
               type="button"
               onClick={handlePrev}
               disabled={currentPage <= 1}
-              className={`border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
+              className={`border-2 border-border px-3 py-2 text-xs tracking-wide transition-colors ${
                 currentPage <= 1
                   ? "opacity-50 text-text-dim cursor-default"
                   : "text-text-muted hover:border-border-active"
@@ -215,7 +224,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
               type="button"
               onClick={handleNext}
               disabled={currentPage >= totalPages}
-              className={`border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] tracking-wide transition-colors ${
+              className={`border-2 border-border px-3 py-2 text-xs tracking-wide transition-colors ${
                 currentPage >= totalPages
                   ? "opacity-50 text-text-dim cursor-default"
                   : "text-text-muted hover:border-border-active"
@@ -225,7 +234,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
             </button>
           </div>
 
-          <span className="text-accent-gold text-[7px] sm:text-[8px] tracking-wide">
+          <span className="text-accent-gold text-xs tracking-wide">
             {t("page")} {currentPage} {t("of")} {totalPages}
           </span>
 
@@ -233,7 +242,7 @@ export function MagazineReader({ issues, initialIssueIndex = 0, onClose }: Magaz
             href={issue.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="border-2 border-border px-3 py-2 text-[7px] sm:text-[8px] text-accent-gold tracking-wide hover:border-border-active transition-colors"
+            className="border-2 border-border px-3 py-2 text-xs text-accent-gold tracking-wide hover:border-border-active transition-colors"
           >
             {t("download")}
           </a>

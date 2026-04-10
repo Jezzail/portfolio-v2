@@ -39,10 +39,10 @@ describe("QuestsSection", () => {
 
     // Roles are translated — check that the English translations appear
     expect(
-      screen.getByText("Sr. Frontend Engineer — React Native")
+      screen.getByText("Sr. Frontend Engineer — React Native"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Frontend Engineer & Engineering Team Lead")
+      screen.getByText("Frontend Engineer & Engineering Team Lead"),
     ).toBeInTheDocument();
   });
 });

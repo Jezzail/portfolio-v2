@@ -33,9 +33,9 @@ test.describe("Ask Pablo chat", () => {
 
     // Open chat
     await page.getByText(/ASK PABLO/).click();
-    await expect(
-      page.getByPlaceholder(/type your question/i)
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByPlaceholder(/type your question/i)).toBeVisible({
+      timeout: 5000,
+    });
 
     // Type a message and send
     const input = page.getByPlaceholder(/type your question/i);
@@ -44,7 +44,7 @@ test.describe("Ask Pablo chat", () => {
 
     // Assert the response appears (the emotion tag is stripped, text is shown)
     await expect(
-      page.getByText(/Thanks for checking out my portfolio/)
+      page.getByText(/Thanks for checking out my portfolio/),
     ).toBeVisible({ timeout: 10000 });
   });
 });

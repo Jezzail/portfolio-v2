@@ -8,36 +8,40 @@ import { ChatScreen } from "@/components/ChatScreen";
 import { HudBar } from "@/components/HudBar";
 
 export default function Home() {
-  const [activeScreen, setActiveScreen] = useState<"title" | "portfolio">("title");
+  const [activeScreen, setActiveScreen] = useState<"title" | "portfolio">(
+    "title",
+  );
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
       {activeScreen !== "title" && <HudBar />}
 
-      <AnimatePresence mode="wait">
-        {activeScreen === "title" && (
-          <motion.div
-            key="title"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <TitleScreen onStart={() => setActiveScreen("portfolio")} />
-          </motion.div>
-        )}
+      <div className="mx-auto max-w-215">
+        <AnimatePresence mode="wait">
+          {activeScreen === "title" && (
+            <motion.div
+              key="title"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <TitleScreen onStart={() => setActiveScreen("portfolio")} />
+            </motion.div>
+          )}
 
-        {activeScreen === "portfolio" && (
-          <motion.div
-            key="portfolio"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <PortfolioScreen onOpenChat={() => setIsChatOpen(true)} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {activeScreen === "portfolio" && (
+            <motion.div
+              key="portfolio"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <PortfolioScreen onOpenChat={() => setIsChatOpen(true)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <AnimatePresence>
         {isChatOpen && (

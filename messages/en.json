@@ -133,6 +133,8 @@
   "hud": {
     "name": "PABLO ABRIL",
     "level": "SR. FRONTEND ENGINEER",
-    "langToggle": "EN"
+    "langToggle": "EN",
+    "dark": "DARK",
+    "light": "LIGHT"
   }
 }

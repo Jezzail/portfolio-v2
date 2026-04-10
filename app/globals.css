@@ -1,24 +1,65 @@
 @import "tailwindcss";
 
 /* ───────────────────────────────────────────────
+   Theme custom properties — dark (default) + light
+   ─────────────────────────────────────────────── */
+:root {
+  --theme-bg: #0a0a1a;
+  --theme-surface: #0e0e28;
+  --theme-border: #2a2a5a;
+  --theme-border-active: #f0d060;
+  --theme-accent-gold: #f0d060;
+  --theme-accent-green: #60d0a0;
+  --theme-accent-blue: #6090f0;
+  --theme-text-primary: #e8e8d0;
+  --theme-text-muted: #8080b0;
+  --theme-text-dim: #3a3a6a;
+}
+
+[data-theme="light"] {
+  --theme-bg: #f0ead6;
+  --theme-surface: #e8dfc8;
+  --theme-border: #b8a878;
+  --theme-border-active: #8a6000;
+  --theme-accent-gold: #8a6000;
+  --theme-accent-green: #2a7a50;
+  --theme-accent-blue: #2a50a0;
+  --theme-text-primary: #1a1a0a;
+  --theme-text-muted: #6a5a30;
+  --theme-text-dim: #b8a878;
+}
+
+/* ───────────────────────────────────────────────
    Design tokens — Tailwind v4 CSS-based config
    ─────────────────────────────────────────────── */
 @theme inline {
-  /* Colours */
-  --color-background: #0a0a1a;
-  --color-surface: #0e0e28;
-  --color-border: #2a2a5a;
-  --color-border-active: #f0d060;
-  --color-accent-gold: #f0d060;
-  --color-accent-green: #60d0a0;
-  --color-accent-blue: #6090f0;
-  --color-text-primary: #e8e8d0;
-  --color-text-muted: #8080b0;
-  --color-text-dim: #3a3a6a;
+  /* Colours — reference theme custom properties */
+  --color-background: var(--theme-bg);
+  --color-surface: var(--theme-surface);
+  --color-border: var(--theme-border);
+  --color-border-active: var(--theme-border-active);
+  --color-accent-gold: var(--theme-accent-gold);
+  --color-accent-green: var(--theme-accent-green);
+  --color-accent-blue: var(--theme-accent-blue);
+  --color-text-primary: var(--theme-text-primary);
+  --color-text-muted: var(--theme-text-muted);
+  --color-text-dim: var(--theme-text-dim);
 
   /* Typography — Press Start 2P everywhere */
   --font-sans: "Press Start 2P", cursive;
   --font-mono: "Press Start 2P", cursive;
+
+  /* Font size scale (pixel font needs smaller sizes) */
+  --font-size-2xs: 7px;
+  --font-size-2xs--line-height: 1.5;
+  --font-size-xs: 9px;
+  --font-size-xs--line-height: 1.5;
+  --font-size-sm: 11px;
+  --font-size-sm--line-height: 1.5;
+  --font-size-base: 13px;
+  --font-size-base--line-height: 1.5;
+  --font-size-lg: 15px;
+  --font-size-lg--line-height: 1.5;
 
   /* Border-radius — disabled globally (pixel aesthetic) */
   --radius-xs: 0px;
@@ -59,7 +100,10 @@ body::after {
    Pixel cursor
    ─────────────────────────────────────────────── */
 * {
-  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="4" height="4" fill="%23f0d060"/><rect x="4" y="4" width="4" height="4" fill="%23f0d060"/><rect x="8" y="8" width="4" height="4" fill="%23f0d060"/><rect x="0" y="4" width="4" height="4" fill="%23e8e8d0"/><rect x="4" y="8" width="4" height="4" fill="%23e8e8d0"/></svg>') 0 0, auto;
+  cursor:
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="4" height="4" fill="%23f0d060"/><rect x="4" y="4" width="4" height="4" fill="%23f0d060"/><rect x="8" y="8" width="4" height="4" fill="%23f0d060"/><rect x="0" y="4" width="4" height="4" fill="%23e8e8d0"/><rect x="4" y="8" width="4" height="4" fill="%23e8e8d0"/></svg>')
+      0 0,
+    auto;
 }
 
 /* ───────────────────────────────────────────────
@@ -73,8 +117,13 @@ img[data-pixel] {
    Retro blink animation (hard on/off, no fade)
    ─────────────────────────────────────────────── */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .animate-blink {
