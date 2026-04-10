@@ -5,7 +5,8 @@ import { useCallback, useSyncExternalStore } from "react";
 export type Theme = "dark" | "light";
 
 function getThemeSnapshot(): Theme {
-  return (document.documentElement.dataset.theme as Theme) ?? "dark";
+  const value = document.documentElement.dataset.theme;
+  return value === "dark" || value === "light" ? value : "dark";
 }
 
 function getServerSnapshot(): Theme {

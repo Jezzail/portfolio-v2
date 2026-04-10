@@ -53,7 +53,7 @@ No hardcoded `text-[Npx]` values in components — all font sizes use Tailwind t
 
 ### Max-width content container
 
-All screen content is constrained to `max-w-[860px] mx-auto` via a wrapper in `page.tsx`.
+All screen content is constrained to `max-w-215 mx-auto` via a wrapper in `page.tsx`.
 CRT scanline overlay and background remain full-bleed (full viewport).
 HudBar has a full-width background with its inner content constrained to the same max-width.
 
@@ -401,8 +401,9 @@ See PortfolioScreen tab transitions decision above — full details there.
 - **Font size scale**: Custom sizes in `@theme inline` — xs=9px, sm=11px, base=13px, lg=15px.
   All components updated: hardcoded `text-[8px]` → `text-xs`, `text-[10px]` → `text-sm`,
   `sm:text-xs` → `sm:text-base`, etc. Sub-scale sizes (7px, 8px) kept for tiny badges.
-- **Max-width container**: 860px centered wrapper in `page.tsx` around screen content.
-  HudBar: full-width background with inner content constrained to same max-width.
+- **Max-width container**: `max-w-215` centered wrapper in `page.tsx` around screen content.
+  HudBar: full-width background with inner content constrained to the same max-width.
   CRT overlay and background remain full-bleed. ChatScreen unaffected (fixed overlay).
 - **i18n keys added**: `hud.dark` / `hud.light` in both en.json and es.json.
-- **No new dependencies** — only CSS, layout, and component changes.
+- **New dev dependency**: `prettier` added for code formatting; `format` / `format:check` scripts
+  wired into lint-staged and CI.

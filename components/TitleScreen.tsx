@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { KeyboardEvent } from "react";
 import { useTheme } from "@/lib/useTheme";
 
 type TitleScreenProps = {
@@ -13,27 +12,10 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
   const tHud = useTranslations("hud");
   const { theme, toggleTheme } = useTheme();
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onStart();
-    }
-  };
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onStart}
-      onKeyDown={handleKeyDown}
-      className="relative flex min-h-screen flex-col items-center justify-center gap-10 px-4 select-none outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
-    >
+    <div className="relative flex min-h-screen flex-col items-center justify-center gap-10 px-4 select-none">
       {/* ── Theme toggle (top-right) ── */}
-      <div
-        className="absolute top-4 right-4"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
+      <div className="absolute top-4 right-4">
         <button
           onClick={toggleTheme}
           className="border-2 border-border bg-background px-2 sm:px-3 py-1.5 text-xs tracking-wider hover:border-border-active transition-colors"
@@ -98,9 +80,12 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
       </div>
 
       {/* ── Press Start ── */}
-      <p className="text-text-primary text-sm sm:text-base animate-blink tracking-widest">
+      <button
+        onClick={onStart}
+        className="text-text-primary text-sm sm:text-base animate-blink tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
+      >
         {t("pressStart")}
-      </p>
+      </button>
     </div>
   );
 }
