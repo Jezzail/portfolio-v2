@@ -150,6 +150,7 @@
     "level": "SR. FRONTEND ENGINEER",
     "langToggle": "EN",
     "dark": "DARK",
-    "light": "LIGHT"
+    "light": "LIGHT",
+    "toggleTheme": "Toggle theme"
   }
 }

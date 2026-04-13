@@ -16,6 +16,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.defaultPrevented) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         onStart();
@@ -46,12 +47,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
 
       {/* ── Game Title ── */}
       <div className="text-center">
-        <h1
-          className="text-accent-gold text-2xl sm:text-4xl leading-loose tracking-wider"
-          style={{
-            textShadow: "3px 3px 0px #b8860b, 6px 6px 0px #3a2a00",
-          }}
-        >
+        <h1 className="text-accent-gold text-2xl sm:text-4xl leading-loose tracking-wider [text-shadow:3px_3px_0px_#b8860b,_6px_6px_0px_#3a2a00]">
           {t("gameName")}
         </h1>
         <p className="text-text-muted text-xs sm:text-sm mt-4 tracking-widest">
@@ -79,7 +75,6 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
                 height={40}
                 data-pixel=""
                 className="w-full h-full scale-x-[-1]"
-                style={{ imageRendering: "pixelated" }}
               />
             </div>
 
@@ -147,7 +142,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
       >
         <span className="inline-flex items-center gap-3">
           <span>▶</span>
-          <span className="translate-y-0.75">PRESS START</span>
+          <span className="translate-y-0.75">{t("pressStart")}</span>
           <span>◀</span>
         </span>
       </button>

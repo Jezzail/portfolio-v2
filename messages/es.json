@@ -150,6 +150,7 @@
     "level": "ING. FRONTEND SENIOR",
     "langToggle": "ES",
     "dark": "OSCURO",
-    "light": "CLARO"
+    "light": "CLARO",
+    "toggleTheme": "Cambiar tema"
   }
 }
