@@ -16,7 +16,22 @@
     "location": "SEOUL, KR",
     "yearsExp": "10+ YRS EXP",
     "downloads": "60K+ DOWNLOADS",
-    "level": "LV 37"
+    "level": "LV 37",
+    "saveFileLabel": "PABLO ABRIL \u2014 SAVE FILE 1",
+    "classLabel": "CLASS:",
+    "classValue": "Senior FE / React Native",
+    "locationLabel": "LOCATION:",
+    "locationValue": "Seoul, South Korea",
+    "expLabel": "EXP:",
+    "expValue": "10+ years",
+    "downloadsLabel": "DOWNLOADS:",
+    "downloadsValue": "60K+",
+    "year": "2025",
+    "active": "ACTIVE",
+    "emptySlot": "\u2014 EMPTY \u2014",
+    "noData": "no data",
+    "emptyStatus": "\u2014\u2014",
+    "copyright": "\u00a9 1988 pablo abril entertainment \u2022 all rights reserved"
   },
   "stats": {
     "title": "CHARACTER STATS",
@@ -135,6 +150,7 @@
     "level": "SR. FRONTEND ENGINEER",
     "langToggle": "EN",
     "dark": "DARK",
-    "light": "LIGHT"
+    "light": "LIGHT",
+    "toggleTheme": "Toggle theme"
   }
 }

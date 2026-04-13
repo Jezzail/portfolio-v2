@@ -13,19 +13,19 @@ import { TitleScreen } from "@/components/TitleScreen";
 describe("TitleScreen", () => {
   it("renders the PRESS START text", () => {
     render(<TitleScreen onStart={() => {}} />);
-    expect(screen.getByText("PRESS START")).toBeInTheDocument();
+    expect(screen.getByText(/PRESS START/)).toBeInTheDocument();
   });
 
-  it("renders the save slot with game name and level", () => {
+  it("renders the save slot with game name and class", () => {
     render(<TitleScreen onStart={() => {}} />);
-    expect(screen.getByText("LV 37")).toBeInTheDocument();
+    expect(screen.getByText(/SAVE FILE 1/)).toBeInTheDocument();
     expect(screen.getAllByText("PABLO ABRIL").length).toBeGreaterThanOrEqual(1);
   });
 
-  it("renders role and location in the save slot", () => {
+  it("renders class and location in the save slot", () => {
     render(<TitleScreen onStart={() => {}} />);
-    expect(screen.getByText("SR. FRONTEND ENGINEER")).toBeInTheDocument();
-    expect(screen.getByText("SEOUL, KR")).toBeInTheDocument();
+    expect(screen.getByText(/Senior FE/)).toBeInTheDocument();
+    expect(screen.getByText(/Seoul, South Korea/)).toBeInTheDocument();
   });
 
   it("calls onStart when clicked", async () => {
