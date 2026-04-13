@@ -78,6 +78,16 @@ body {
   background: var(--color-background);
   color: var(--color-text-primary);
 }
+
+/* Hide all scrollbars globally while keeping scroll functional */
+*,
+*::before,
+*::after {
+  scrollbar-width: none; /* Firefox */
+}
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
 /* ───────────────────────────────────────────────
    CRT scanline overlay — fixed fullscreen
    ─────────────────────────────────────────────── */
@@ -86,6 +96,26 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* Local CRT overlay — for containers that sit above the global CRT
+   but still want scanlines on their chrome (not on specific children) */
+.crt-local {
+  position: relative;
+}
+.crt-local::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,

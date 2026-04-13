@@ -9,13 +9,6 @@ const CHAR_INFO = [
   { labelKey: "location", valueKey: "locationValue" },
 ] as const;
 
-const STAT_BOXES = [
-  { labelKey: "yearsExp", valueKey: "yearsExpValue" },
-  { labelKey: "appDownloads", valueKey: "appDownloadsValue" },
-  { labelKey: "teamSizeLed", valueKey: "teamSizeLedValue" },
-  { labelKey: "tasksDelivered", valueKey: "tasksDeliveredValue" },
-] as const;
-
 const LINKS = [
   { labelKey: "github", href: "https://github.com/Jezzail" },
   { labelKey: "linkedin", href: "https://linkedin.com/in/pabloabril/" },
@@ -26,7 +19,7 @@ export function StatsSection() {
   const t = useTranslations("stats");
 
   return (
-    <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-8">
+    <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
       {/* Section title */}
       <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─
@@ -57,23 +50,6 @@ export function StatsSection() {
             {t("statusValue")}
           </span>
         </div>
-      </div>
-
-      {/* Stat boxes — 2x2 grid */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        {STAT_BOXES.map(({ labelKey, valueKey }) => (
-          <div
-            key={labelKey}
-            className="border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center"
-          >
-            <span className="text-accent-gold text-xs tracking-wide mb-2">
-              {t(labelKey)}
-            </span>
-            <span className="text-accent-green text-base sm:text-lg">
-              {t(valueKey)}
-            </span>
-          </div>
-        ))}
       </div>
 
       {/* Bio */}

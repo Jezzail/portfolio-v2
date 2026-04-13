@@ -58,7 +58,7 @@ export function SkillsSection() {
         }));
 
   return (
-    <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
+    <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
       {/* Section title */}
       <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─
@@ -77,7 +77,7 @@ export function SkillsSection() {
             role="tab"
             aria-selected={filter === f}
             onClick={() => setFilter(f)}
-            className={`border-2 px-3 py-2 text-xs tracking-wide transition-colors ${
+            className={`border-2 px-3 py-2 text-2xs sm:text-xs tracking-wide transition-colors ${
               filter === f
                 ? "border-border-active text-accent-gold"
                 : "border-border text-text-muted hover:text-text-primary"
@@ -102,26 +102,31 @@ export function SkillsSection() {
             {/* Skill rows */}
             <div className="space-y-2">
               {items.map((skill) => (
-                <div key={skill.name} className="flex items-center gap-3">
+                <div
+                  key={skill.name}
+                  className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3"
+                >
                   {/* Skill name */}
-                  <span className="text-text-primary text-xs min-w-24 sm:min-w-44 shrink-0">
+                  <span className="text-text-primary text-xs w-full sm:w-35 shrink-0">
                     {skill.name}
                   </span>
 
-                  {/* XP bar */}
-                  <div className="flex-1 border-2 border-border h-4 sm:h-5 relative overflow-hidden">
-                    <div
-                      className={`h-full ${barColorClass(skill.level)}`}
-                      style={{
-                        width: `${Math.max(0, Math.min(skill.level, MAX_SKILL_LEVEL)) * (100 / MAX_SKILL_LEVEL)}%`,
-                      }}
-                    />
-                  </div>
+                  {/* XP bar + level */}
+                  <div className="flex items-center gap-3 w-full">
+                    <div className="flex-1 border-2 border-border h-4 sm:h-5 relative overflow-hidden">
+                      <div
+                        className={`h-full ${barColorClass(skill.level)}`}
+                        style={{
+                          width: `${Math.max(0, Math.min(skill.level, MAX_SKILL_LEVEL)) * (100 / MAX_SKILL_LEVEL)}%`,
+                        }}
+                      />
+                    </div>
 
-                  {/* Level label */}
-                  <span className="text-accent-gold text-xs min-w-12 sm:min-w-16 text-right shrink-0">
-                    {t("lvl")} {skill.level}
-                  </span>
+                    {/* Level label */}
+                    <span className="text-accent-gold text-xs min-w-12 sm:min-w-16 text-right shrink-0">
+                      {t("lvl")} {skill.level}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

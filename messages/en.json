@@ -4,7 +4,9 @@
     "skills": "SKILLS",
     "quests": "QUESTS",
     "items": "ITEMS",
-    "askPablo": "ASK PABLO"
+    "askPablo": "ASK PABLO",
+    "askPabloDesc": "talk to the character directly...",
+    "open": "OPEN"
   },
   "title": {
     "pressStart": "PRESS START",
@@ -145,12 +147,19 @@
     "pablo": "PABLO",
     "you": "YOU"
   },
+  "portfolio": {
+    "backToTitle": "BACK TO TITLE"
+  },
   "hud": {
     "name": "PABLO ABRIL",
     "level": "SR. FRONTEND ENGINEER",
+    "lvl": "LVL 10",
+    "role": "SENIOR FRONTEND ENGINEER",
     "langToggle": "EN",
     "dark": "DARK",
     "light": "LIGHT",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "switchToEs": "Switch to Spanish",
+    "switchToEn": "Switch to English"
   }
 }

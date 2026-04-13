@@ -4,7 +4,9 @@
     "skills": "HABILIDADES",
     "quests": "MISIONES",
     "items": "OBJETOS",
-    "askPablo": "PREGUNTA A PABLO"
+    "askPablo": "PREGUNTA A PABLO",
+    "askPabloDesc": "habla con el personaje directamente...",
+    "open": "ABRIR"
   },
   "title": {
     "pressStart": "PULSA START",
@@ -145,12 +147,19 @@
     "pablo": "PABLO",
     "you": "TÚ"
   },
+  "portfolio": {
+    "backToTitle": "VOLVER AL TÍTULO"
+  },
   "hud": {
     "name": "PABLO ABRIL",
     "level": "ING. FRONTEND SENIOR",
+    "lvl": "NVL 10",
+    "role": "INGENIERO FRONTEND SENIOR",
     "langToggle": "ES",
     "dark": "OSCURO",
     "light": "CLARO",
-    "toggleTheme": "Cambiar tema"
+    "toggleTheme": "Cambiar tema",
+    "switchToEs": "Cambiar a español",
+    "switchToEn": "Cambiar a inglés"
   }
 }

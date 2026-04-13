@@ -8,15 +8,16 @@ export function HudBar() {
   const t = useTranslations("hud");
 
   return (
-    <header className="border-b-2 border-border bg-surface">
+    <header className="border-l-2 border-r-2 border-border bg-surface">
       <div className="mx-auto max-w-215 flex items-center justify-between px-3 sm:px-5 py-3">
-        {/* Name + role */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <span className="text-accent-gold text-xs sm:text-sm tracking-wide shrink-0">
-            ▶ {t("name")}
-          </span>
-          <span className="text-text-dim text-xs hidden sm:inline">│</span>
-          <span className="text-text-muted text-xs truncate">{t("level")}</span>
+        {/* Name + level/role — two-line block */}
+        <div className="min-w-0">
+          <p className="text-accent-gold text-base font-bold tracking-wide">
+            {t("name")}
+          </p>
+          <p className="text-accent-green text-xs tracking-wide mt-1">
+            {t("lvl")} · {t("role")}
+          </p>
         </div>
 
         {/* Toggles */}
