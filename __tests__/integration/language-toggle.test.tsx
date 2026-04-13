@@ -43,16 +43,21 @@ describe("Language toggle", () => {
   it("renders EN as active by default", () => {
     render(<HudBar />);
 
-    // The toggle is a single button showing the current locale
-    const langButton = screen.getByRole("button", { name: "EN" });
+    // The toggle button's accessible name is the aria-label (target language)
+    const langButton = screen.getByRole("button", {
+      name: "Switch to Spanish",
+    });
     expect(langButton).toBeInTheDocument();
+    expect(langButton).toHaveTextContent("EN");
   });
 
   it("sets locale cookie to 'es' and calls router.refresh on click", async () => {
     const user = userEvent.setup();
     render(<HudBar />);
 
-    const langButton = screen.getByRole("button", { name: "EN" });
+    const langButton = screen.getByRole("button", {
+      name: "Switch to Spanish",
+    });
     await user.click(langButton);
 
     expect(document.cookie).toContain("locale=es");
