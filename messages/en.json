@@ -158,6 +158,8 @@
     "langToggle": "EN",
     "dark": "DARK",
     "light": "LIGHT",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "switchToEs": "Switch to Spanish",
+    "switchToEn": "Switch to English"
   }
 }

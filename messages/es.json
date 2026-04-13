@@ -158,6 +158,8 @@
     "langToggle": "ES",
     "dark": "OSCURO",
     "light": "CLARO",
-    "toggleTheme": "Cambiar tema"
+    "toggleTheme": "Cambiar tema",
+    "switchToEs": "Cambiar a español",
+    "switchToEn": "Cambiar a inglés"
   }
 }
