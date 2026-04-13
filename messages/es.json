@@ -16,7 +16,22 @@
     "location": "SEÚL, KR",
     "yearsExp": "+10 AÑOS EXP",
     "downloads": "+60K DESCARGAS",
-    "level": "NV 37"
+    "level": "NV 37",
+    "saveFileLabel": "PABLO ABRIL — ARCHIVO 1",
+    "classLabel": "CLASE:",
+    "classValue": "Senior FE / React Native",
+    "locationLabel": "UBICACIÓN:",
+    "locationValue": "Seúl, Corea del Sur",
+    "expLabel": "EXP:",
+    "expValue": "+10 años",
+    "downloadsLabel": "DESCARGAS:",
+    "downloadsValue": "60K+",
+    "year": "2025",
+    "active": "ACTIVO",
+    "emptySlot": "— VACÍO —",
+    "noData": "sin datos",
+    "emptyStatus": "——",
+    "copyright": "© 1988 pablo abril entertainment • todos los derechos reservados"
   },
   "stats": {
     "title": "ESTADÍSTICAS",

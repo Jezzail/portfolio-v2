@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import type { KeyboardEvent } from "react";
-import { useTheme } from "@/lib/useTheme";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 type TitleScreenProps = {
   onStart: () => void;
@@ -10,8 +13,17 @@ type TitleScreenProps = {
 
 export function TitleScreen({ onStart }: TitleScreenProps) {
   const t = useTranslations("title");
-  const tHud = useTranslations("hud");
-  const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onStart();
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [onStart]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -21,44 +33,25 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
   };
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={onStart}
-      onKeyDown={handleKeyDown}
-      className="relative flex min-h-screen flex-col items-center justify-center gap-10 px-4 select-none outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
-    >
-      {/* ── Theme toggle (top-right) ── */}
+    <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-4 sm:px-6 pb-10 select-none">
+      {/* ── Toggles (top-right) ── */}
       <div
-        className="absolute top-4 right-4"
+        className="absolute top-4 right-4 flex items-center gap-2"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={toggleTheme}
-          className="border-2 border-border bg-background px-2 sm:px-3 py-1.5 text-xs tracking-wider hover:border-border-active transition-colors"
-        >
-          <span
-            className={
-              theme === "dark" ? "text-accent-gold" : "text-text-muted"
-            }
-          >
-            {tHud("dark")}
-          </span>
-          <span className="text-text-dim mx-1">/</span>
-          <span
-            className={
-              theme === "light" ? "text-accent-gold" : "text-text-muted"
-            }
-          >
-            {tHud("light")}
-          </span>
-        </button>
+        <ThemeToggle />
+        <LanguageToggle />
       </div>
 
       {/* ── Game Title ── */}
       <div className="text-center">
-        <h1 className="text-accent-gold text-xl sm:text-3xl md:text-4xl leading-loose tracking-wider">
+        <h1
+          className="text-accent-gold text-2xl sm:text-4xl leading-loose tracking-wider"
+          style={{
+            textShadow: "3px 3px 0px #b8860b, 6px 6px 0px #3a2a00",
+          }}
+        >
           {t("gameName")}
         </h1>
         <p className="text-text-muted text-xs sm:text-sm mt-4 tracking-widest">
@@ -66,45 +59,103 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
         </p>
       </div>
 
-      {/* ── Save Slot ── */}
-      <div className="border-2 border-border-active bg-surface w-full max-w-sm sm:max-w-md p-5 sm:p-6">
-        {/* Slot header */}
-        <div className="flex items-center gap-2 border-b-2 border-border pb-3 mb-4">
-          <span className="text-accent-gold text-sm">▶</span>
-          <span className="text-accent-gold text-sm tracking-wide">
-            {t("saveSlot")} 1
-          </span>
-        </div>
+      {/* ── Save Slots Container ── */}
+      <div className="w-full max-w-215 flex flex-col gap-3">
+        {/* ── Save Slot 1 (active) ── */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onStart}
+          onKeyDown={handleKeyDown}
+          className="border-2 bg-surface hover:bg-border p-4 sm:p-5 border-border-active transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
+        >
+          <div className="flex items-center gap-3">
+            {/* Avatar with arrow via ::before */}
+            <div className="relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 border-2 border-text-dim flex items-center justify-center p-0.5 before:content-['▶'] before:absolute before:-left-4 before:text-accent-gold before:text-xs before:opacity-100 before:transition-opacity">
+              <Image
+                src="/avatar/pat_neutral.png"
+                alt=""
+                width={40}
+                height={40}
+                data-pixel=""
+                className="w-full h-full scale-x-[-1]"
+                style={{ imageRendering: "pixelated" }}
+              />
+            </div>
 
-        {/* Name + level row */}
-        <div className="flex items-baseline gap-3 mb-4">
-          <span className="text-accent-green text-sm sm:text-base">
-            {t("level")}
-          </span>
-          <span className="text-text-primary text-sm sm:text-base">
-            {t("gameName")}
-          </span>
-        </div>
+            {/* Slot info */}
+            <div className="flex-1 min-w-0">
+              {/* Save file label */}
+              <span className="text-text-primary text-xs sm:text-sm truncate block">
+                {t("saveFileLabel")}
+              </span>
 
-        {/* Stats */}
-        <div className="space-y-3 text-xs sm:text-sm">
-          <p className="text-text-muted">{t("role")}</p>
-          <div className="flex justify-between text-text-muted">
-            <span>{t("location")}</span>
-            <span>{t("yearsExp")}</span>
+              {/* Tags — stacked vertically */}
+              <div className="flex flex-col gap-1 mt-2 text-2xs sm:text-xs">
+                <span>
+                  <span className="text-text-muted">{t("classLabel")}</span>{" "}
+                  <span className="text-accent-green">{t("classValue")}</span>
+                </span>
+                <span>
+                  <span className="text-text-muted">{t("locationLabel")}</span>{" "}
+                  <span className="text-accent-green">
+                    {t("locationValue")}
+                  </span>
+                </span>
+                <span>
+                  <span className="text-text-muted">{t("expLabel")}</span>{" "}
+                  <span className="text-accent-green">{t("expValue")}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Active badge — right-aligned, vertically centered */}
+            <span className="text-text-muted text-sm shrink-0 self-center hidden sm:inline-block">
+              {t("active")}
+            </span>
           </div>
-          <p className="text-accent-gold">★ {t("downloads")}</p>
+        </div>
+
+        {/* ── Empty Slot ── */}
+        <div className="border-2 border-border bg-surface p-4 sm:p-5 hover:border-text-dim transition-colors">
+          <div className="flex items-center gap-3">
+            {/* Placeholder avatar */}
+            <div className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 border-2 border-border flex items-center justify-center">
+              <span className="text-text-dim text-xl">?</span>
+            </div>
+
+            {/* Empty label */}
+            <div className="flex-1 min-w-0">
+              <p className="text-text-dim text-xs sm:text-sm">
+                {t("emptySlot")}
+              </p>
+              <p className="text-text-dim text-2xs mt-1">{t("noData")}</p>
+            </div>
+
+            {/* Disabled status */}
+            <span className="text-text-dim text-xs shrink-0 self-center">
+              {t("emptyStatus")}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* ── Press Start ── */}
       <button
-        type="button"
         onClick={onStart}
-        className="text-text-primary text-sm sm:text-base animate-blink tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
+        className="text-accent-gold text-sm sm:text-base animate-blink tracking-widest px-10 py-4 bg-transparent border-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
       >
-        {t("pressStart")}
+        <span className="inline-flex items-center gap-3">
+          <span>▶</span>
+          <span className="translate-y-0.75">PRESS START</span>
+          <span>◀</span>
+        </span>
       </button>
+
+      {/* ── Copyright ── */}
+      <p className="absolute bottom-4 left-4 right-4 text-text-dim text-2xs sm:text-xs tracking-wide text-center">
+        {t("copyright")}
+      </p>
     </div>
   );
 }

@@ -138,6 +138,8 @@ types/index.ts              Screen, PortfolioTab, ChatMessage, Skill,           
                              SkillCategory, Quest, QuestStatus,
                              QuestFilter types
 components/TitleScreen.tsx   Game title screen with PRESS START                       ✅
+components/ThemeToggle.tsx   Shared 🌙/☀️ theme toggle pill button                    ✅
+components/LanguageToggle.tsx Shared EN/ES language toggle pill button                 ✅
 components/PortfolioScreen.tsx  Tabbed RPG menu (tab state + AnimatePresence)          ✅
 components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ✅
 components/HudBar.tsx        Top HUD — name, role, EN/ES cookie toggle                ✅
@@ -186,18 +188,36 @@ e2e/                         E2E tests (full flow, tab flow, ask pablo)         
 
 ### TitleScreen (completed)
 
-- Full-screen retro RPG title with three vertical sections: game title, save slot, PRESS START.
-- Game title: "PABLO ABRIL" in gold (`text-accent-gold`), "─── PORTFOLIO ───" subtitle in muted.
-- Save slot: gold-bordered box (`border-2 border-border-active`) displaying LV 37, role, location,
-  years exp, and ★ 60K+ DOWNLOADS. Styled after SNES save file select screens.
-- PRESS START: hard-blink animation (`step-end`, 1.2s) via `.animate-blink` utility in `globals.css`.
-- Accessibility: uses `role="button"` + `tabIndex={0}` with React `onKeyDown` handler (Enter/Space)
-  instead of a window-level `useEffect` keydown listener. Added `focus-visible:ring-2` for keyboard
-  focus. This diverges from the original plan (which only specified Enter + click anywhere) but is
-  strictly an enhancement.
-- All 7 display strings (`gameName`, `subtitle`, `role`, `location`, `yearsExp`, `downloads`,
-  `level`) sourced from `useTranslations("title")` — zero hardcoded text.
-- Responsive: text sizes scale via `sm:` / `md:` breakpoints; save slot maxes at `max-w-md`.
+- Full-screen retro RPG title with vertical sections: game title, save slots, PRESS START, copyright.
+- Game title: "PABLO ABRIL" in gold (`text-accent-gold`) with 3D text-shadow (gold #b8860b + dark brown
+  #3a2a00, two-layer offset). Subtitle "─── PORTFOLIO ───" in muted.
+- Save slot 1: slim RPG row with bordered pixel avatar (`public/avatar/mini_pat.png`, image-rendering:
+  pixelated). ▶ arrow on hover via CSS `::before` pseudo-element on avatar container (no layout shift).
+  CLASS / LOCATION / EXP tags stacked vertically: labels in `accent-blue`, values in `accent-green`.
+  "ACTIVE" text right-aligned, vertically centered. No year badge, no divider line.
+  Card width matches PortfolioScreen content (`max-w-215`).
+- Empty slot: "— EMPTY —" / "no data" with placeholder ? avatar. Right column shows "——".
+  `pointer-events-none` — non-interactive. Hover border uses `text-dim` color (not gold) to signal
+  disabled state.
+- PRESS START: ▶ and ◀ inline with text (no flex), blink animation (`step-end`, 1.2s).
+- Copyright line: normal document flow with `mt-4` (not absolutely positioned), respects mobile spacing.
+- Top-right toggles: shared `ThemeToggle` + shared `LanguageToggle` components.
+- Accessibility: `role="button"` + `tabIndex={0}` + `onKeyDown` (Enter/Space). `focus-visible:ring-2`.
+- All display strings from `useTranslations("title")` — zero hardcoded text.
+
+### ThemeToggle (completed)
+
+- Shared client component in `components/ThemeToggle.tsx`. Used by both TitleScreen and HudBar.
+- Renders 🌙/☀️ emoji pill toggle with active theme highlighted in gold (`text-accent-gold`),
+  inactive in muted. Same bordered pill style as language toggle.
+- Uses `useTheme()` hook from `lib/useTheme.ts`.
+
+### LanguageToggle (completed)
+
+- Shared client component in `components/LanguageToggle.tsx`. Used by both TitleScreen and HudBar.
+- EN/ES pill toggle with active locale highlighted in gold. Sets `locale` cookie with
+  `max-age=31536000;SameSite=Lax` then calls `router.refresh()`.
+- Uses `useLocale()` and `useRouter()` from next-intl / Next.js.
 
 ### StatsSection (completed)
 
