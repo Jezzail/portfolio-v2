@@ -16,19 +16,9 @@ export function LanguageToggle() {
   return (
     <button
       onClick={toggleLocale}
-      className="shrink-0 border-2 border-border bg-background px-2 sm:px-3 py-1.5 text-xs tracking-wider hover:border-border-active transition-colors"
+      className="shrink-0 border-2 border-border bg-background px-2 sm:px-3 py-1.5 text-xs tracking-wider text-accent-gold hover:border-border-active transition-colors"
     >
-      <span
-        className={locale === "en" ? "text-accent-gold" : "text-text-muted"}
-      >
-        EN
-      </span>
-      <span className="text-text-dim mx-1">/</span>
-      <span
-        className={locale === "es" ? "text-accent-gold" : "text-text-muted"}
-      >
-        ES
-      </span>
+      {locale === "en" ? "EN" : "ES"}
     </button>
   );
 }

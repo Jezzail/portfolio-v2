@@ -43,7 +43,7 @@ export function ItemsSection() {
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
 
   return (
-    <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
+    <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
       {/* Section title */}
       <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─

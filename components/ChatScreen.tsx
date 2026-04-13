@@ -223,18 +223,38 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     }
   };
 
+  const avatarCrossfade = (
+    <>
+      <img
+        src={`/avatar/pat_${img1Emotion}.png`}
+        alt=""
+        data-pixel
+        className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
+        style={{ opacity: showFirst ? 1 : 0 }}
+      />
+      <img
+        src={`/avatar/pat_${img2Emotion}.png`}
+        alt=""
+        data-pixel
+        className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
+        style={{ opacity: showFirst ? 0 : 1 }}
+      />
+    </>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex bg-background">
+    <div className="fixed inset-0 z-50 flex flex-col md:flex-row h-dvh bg-background">
       {/* Chat panel */}
-      <div className="flex flex-1 flex-col p-4 md:p-6">
+      <div className="flex flex-1 flex-col p-4 md:p-6 min-h-0">
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-border pb-3 mb-4">
-          <h2 className="text-sm md:text-base text-accent-gold">
+        <div className="flex items-center justify-between border-b-2 border-border pb-3 mb-4 gap-3">
+          <h2 className="text-sm md:text-base text-accent-gold shrink-0">
             {t("title")}
           </h2>
+
           <button
             onClick={onClose}
-            className="border-2 border-border px-2 py-1 text-sm text-text-muted hover:border-border-active hover:text-accent-gold"
+            className="shrink-0 border-2 border-border px-2 py-1 text-sm text-text-muted hover:border-border-active hover:text-accent-gold"
             aria-label={t("close")}
           >
             ×
@@ -276,8 +296,17 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Mobile avatar strip — above input */}
+        <div className="flex items-center justify-between border-t-2 border-border mt-2 md:hidden">
+          <div className="flex flex-col">
+            <p className="text-xs text-accent-gold mb-1">▶ {tHud("name")}</p>
+            <p className="text-2xs text-text-muted">{tHud("level")}</p>
+          </div>
+          <div className="relative w-32 h-32 shrink-0">{avatarCrossfade}</div>
+        </div>
+
         {/* Input row */}
-        <div className="flex gap-2 mt-3 pt-3 border-t-2 border-border">
+        <div className="flex gap-2 mt-2 pt-2 border-t-2 border-border md:mt-3 md:pt-3">
           <input
             ref={inputRef}
             type="text"
@@ -302,21 +331,8 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
 
       {/* Avatar panel — hidden on mobile */}
       <div className="hidden md:flex flex-col items-center justify-center w-64 lg:w-80 border-l-2 border-border p-6">
-        <div className="relative w-32 h-32 lg:w-48 lg:h-48 mb-4">
-          <img
-            src={`/avatar/pat_${img1Emotion}.png`}
-            alt=""
-            data-pixel
-            className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
-            style={{ opacity: showFirst ? 1 : 0 }}
-          />
-          <img
-            src={`/avatar/pat_${img2Emotion}.png`}
-            alt=""
-            data-pixel
-            className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
-            style={{ opacity: showFirst ? 0 : 1 }}
-          />
+        <div className="relative min-w-32 min-h-32 w-48 h-48 mb-4">
+          {avatarCrossfade}
         </div>
         <p className="text-sm text-accent-gold mb-1">▶ {tHud("name")}</p>
         <p className="text-xs text-text-muted">{tHud("level")}</p>

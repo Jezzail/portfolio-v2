@@ -53,9 +53,10 @@ No hardcoded `text-[Npx]` values in components — all font sizes use Tailwind t
 
 ### Max-width content container
 
-All screen content is constrained to `max-w-215 mx-auto` via a wrapper in `page.tsx`.
+TitleScreen is wrapped in `max-w-215 mx-auto` via page.tsx. PortfolioScreen manages its
+own max-w-215 internally — HudBar renders full-width (full bleed bg), while TabNav and
+content sections are each wrapped in `max-w-215 mx-auto`.
 CRT scanline overlay and background remain full-bleed (full viewport).
-HudBar has a full-width background with its inner content constrained to the same max-width.
 
 ### Single-page app with React state routing
 
@@ -92,9 +93,10 @@ Since this is an SPA, we use next-intl's "without i18n routing" setup:
 
 ### HudBar design
 
-- Displays `▶ PABLO ABRIL` (gold) + role (muted) separated by a dim `│` on desktop.
-- EN/ES toggle is a bordered button with both labels visible; active locale highlighted in gold.
-- Uses `hud.name` and `hud.level` i18n keys (added to both en.json and es.json).
+- Two-line left block: line 1 = `PABLO ABRIL` in `text-accent-gold text-base font-bold`,
+  line 2 = `LVL 10 · SENIOR FRONTEND ENGINEER` in `text-accent-green text-xs`.
+- Uses `hud.name`, `hud.lvl`, and `hud.role` i18n keys (added to both en.json and es.json).
+- Theme toggle and language toggle sit on the right, vertically centered.
 - Locale toggle sets `locale` cookie with `max-age=31536000;SameSite=Lax` then calls `router.refresh()`.
 
 ### PortfolioScreen tab transitions
@@ -102,8 +104,19 @@ Since this is an SPA, we use next-intl's "without i18n routing" setup:
 - `PortfolioScreen` owns `activeTab` state and delegates tab rendering to `TabNav`.
 - Content area uses `AnimatePresence mode="wait"` with subtle y-axis fade (`y: 4` → `0` → `-4`,
   150ms) between tab switches.
-- ASK PABLO is not a real tab — it doesn't set `activeTab`. Instead it calls `onOpenChat` which
-  bubbles up to `page.tsx` to toggle the `ChatScreen` overlay.
+- ASK PABLO is an inline navigator bar between HudBar and TabNav (inside the sticky header
+  group). Full-width button with chat icon, `[ ASK PABLO ]` title + subtitle on left,
+  `▶ OPEN` on right. Uses `nav.askPablo`, `nav.askPabloDesc`, `nav.open` i18n keys.
+- `◀ BACK TO TITLE` text button below tab content area — calls `onBack` prop to return
+  to TitleScreen. I18n key: `portfolio.backToTitle`.
+- Scrollbar hidden globally on all elements via `*` selector with `scrollbar-width: none`
+  (Firefox) and `*::-webkit-scrollbar { display: none }` (Chromium/Safari) in globals.css.
+- TabNav wrapper has `border-l-2 border-r-2 border-border` to contain edges on wide screens.
+- **Sticky header group**: HudBar + ASK PABLO navigator + TabNav are wrapped in a single
+  `sticky top-0 z-40` container inside PortfolioScreen. HudBar renders full-width (full bleed bg),
+  navigator and TabNav are inside `max-w-215`. All stick together when scrolling.
+- `isChatOpen` prop removed — no longer needed since the floating bubble was replaced by
+  the inline navigator.
 
 ### API route for chat
 
@@ -115,16 +128,18 @@ Since this is an SPA, we use next-intl's "without i18n routing" setup:
 RootLayout (server)
 └─ NextIntlClientProvider
    └─ Home (page.tsx, client — screen state)
-      ├─ HudBar (client — lang toggle, visible on portfolio + chat) ✅
       ├─ AnimatePresence mode="wait"
-      │  ├─ TitleScreen (client — onStart callback) ✅
-      │  └─ PortfolioScreen (client — tabbed content) ✅
-      │     ├─ TabNav (client — tab switching + ASK PABLO button) ✅
-      │     └─ AnimatePresence mode="wait" (tab content transitions)
-      │        ├─ StatsSection (client — useTranslations) ✅
-      │        ├─ SkillsSection (client — useTranslations + useState) ✅
-      │        ├─ QuestsSection (client — useTranslations + useState) ✅
-      │        └─ ItemsSection (client — useTranslations) ✅
+      │  ├─ TitleScreen (client — onStart callback, inside max-w-215) ✅
+      │  └─ PortfolioScreen (client — manages own max-w-215) ✅
+      │     ├─ sticky top-0 z-40 wrapper
+      │     │  ├─ HudBar (client — full-width bg, toggles) ✅
+      │     │  ├─ ASK PABLO navigator (inline button → opens chat) ✅
+      │     │  └─ TabNav (client — tab switching, inside max-w-215) ✅
+      │     ├─ AnimatePresence mode="wait" (tab content, inside max-w-215)
+      │     │  ├─ StatsSection (client — useTranslations) ✅
+      │     │  ├─ SkillsSection (client — useTranslations + useState) ✅
+      │     │  ├─ QuestsSection (client — useTranslations + useState) ✅
+      │     │  └─ ItemsSection (client — useTranslations) ✅
       └─ AnimatePresence (overlay)
          └─ ChatScreen (client — fixed overlay, chat UI) ✅
 
@@ -138,12 +153,12 @@ types/index.ts              Screen, PortfolioTab, ChatMessage, Skill,           
                              SkillCategory, Quest, QuestStatus,
                              QuestFilter types
 components/TitleScreen.tsx   Game title screen with PRESS START                       ✅
-components/ThemeToggle.tsx   Shared 🌙/☀️ theme toggle pill button                    ✅
-components/LanguageToggle.tsx Shared EN/ES language toggle pill button                 ✅
+components/ThemeToggle.tsx   Shared 🌙/☀️ single-emoji theme toggle button             ✅
+components/LanguageToggle.tsx Shared single-active-locale toggle button                ✅
 components/PortfolioScreen.tsx  Tabbed RPG menu (tab state + AnimatePresence)          ✅
 components/ChatScreen.tsx    Ask Pablo AI chat overlay                                ✅
 components/HudBar.tsx        Top HUD — name, role, EN/ES cookie toggle                ✅
-components/TabNav.tsx        Tab navigation — 4 tabs + ASK PABLO overlay trigger      ✅
+components/TabNav.tsx        Tab navigation — 4 tabs only                            ✅
 components/StatsSection.tsx  Bio / character stats                                    ✅
 components/SkillsSection.tsx Tech skills as XP bars with category filters            ✅
 components/QuestsSection.tsx Work experience as quests                                ✅
@@ -151,7 +166,7 @@ components/ItemsSection.tsx  Projects as collectible items                      
 app/api/chat/route.ts       POST endpoint for Anthropic chat                         ✅
 i18n/request.ts             next-intl request config (cookie-based locale)            ✅
 messages/en.json             English translations (nav, title, stats, skills,          ✅
-                             quests, items, chat, hud sections)
+                             quests, items, chat, hud, portfolio sections)
 messages/es.json             Spanish translations (mirrors en.json)                   ✅
 data/                        Content data files for skills, quests, items            ✅ (data/skills.ts, data/quests.ts, data/items.ts)
 components/MagazineReader.tsx  Inline PDF reader for Missed Trigger magazine          ✅
@@ -200,23 +215,30 @@ e2e/                         E2E tests (full flow, tab flow, ask pablo)         
   `pointer-events-none` — non-interactive. Hover border uses `text-dim` color (not gold) to signal
   disabled state.
 - PRESS START: ▶ and ◀ inline with text (no flex), blink animation (`step-end`, 1.2s).
-- Copyright line: normal document flow with `mt-4` (not absolutely positioned), respects mobile spacing.
-- Top-right toggles: shared `ThemeToggle` + shared `LanguageToggle` components.
+- Copyright line: absolutely positioned at bottom (`absolute bottom-4`), keeps title
+  section centered via `justify-center` on the flex column.
+- Top-right toggles: shared `ThemeToggle` + shared `LanguageToggle` components, positioned
+  within the `max-w-215` parent container (absolute top-right inside `relative` root).
 - Accessibility: `role="button"` + `tabIndex={0}` + `onKeyDown` (Enter/Space). `focus-visible:ring-2`.
 - All display strings from `useTranslations("title")` — zero hardcoded text.
+- Mobile no-scroll: uses `h-dvh overflow-hidden` on root element. `flex flex-col justify-center`
+  centers the main content (title + save slots + PRESS START). Copyright is absolutely positioned
+  at bottom. Reduced padding on mobile via responsive prefixes (`py-6 sm:py-10`, `mt-2 sm:mt-4`).
 
 ### ThemeToggle (completed)
 
 - Shared client component in `components/ThemeToggle.tsx`. Used by both TitleScreen and HudBar.
-- Renders 🌙/☀️ emoji pill toggle with active theme highlighted in gold (`text-accent-gold`),
-  inactive in muted. Same bordered pill style as language toggle.
+- Single-emoji button: shows only the active theme — 🌙 for dark, ☀️ for light. Clicking toggles.
+  No text label, no two-option pill, no highlight logic needed.
+- Same bordered button style as language toggle.
 - Uses `useTheme()` hook from `lib/useTheme.ts`.
 
 ### LanguageToggle (completed)
 
 - Shared client component in `components/LanguageToggle.tsx`. Used by both TitleScreen and HudBar.
-- EN/ES pill toggle with active locale highlighted in gold. Sets `locale` cookie with
-  `max-age=31536000;SameSite=Lax` then calls `router.refresh()`.
+- Single-active-locale button: shows only the current locale (`EN` or `ES`) in `text-accent-gold`.
+  Clicking toggles to the other. No two-option pill.
+- Sets `locale` cookie with `max-age=31536000;SameSite=Lax` then calls `router.refresh()`.
 - Uses `useLocale()` and `useRouter()` from next-intl / Next.js.
 
 ### StatsSection (completed)
@@ -224,8 +246,8 @@ e2e/                         E2E tests (full flow, tab flow, ask pablo)         
 - Content (character info, stat values, bio, contact links) is defined inline in the component
   via i18n keys rather than in a `data/` file. StatsSection has no typed data array because its
   content is unique/singleton — unlike skills, quests, and items which are lists of similar entries.
-- Layout: character info block (gold labels, white values, green status), 2×2 stat grid
-  (gold labels, green values), bio paragraph, and `▶`-prefixed contact links.
+- Layout: character info block (gold labels, white values, green status),
+  bio paragraph, and `▶`-prefixed contact links. (2×2 stat grid removed.)
 - All strings in `messages/en.json` and `messages/es.json` under the `stats` namespace.
 - Contact links: GitHub (github.com/Jezzail), LinkedIn (linkedin.com/in/pabloabril/),
   Email (pat43607@gmail.com) — all open in new tab with `rel="noopener noreferrer"`.
@@ -246,7 +268,10 @@ See PortfolioScreen tab transitions decision above — full details there.
   with `border-border-active text-accent-gold`. Filter state managed via `useState<Filter>`.
 - When ALL is selected, skills are grouped by category with `▸ CATEGORY` headers.
   When a specific category is selected, group headers are hidden.
-- Each skill row: name (left), pixel XP bar (center, `border-2 border-border`), LVL number (right, gold).
+- Each skill row: `flex-col` on mobile, `sm:flex-row sm:items-center` on desktop.
+  Name has `sm:w-35` fixed width so long names (e.g. "Performance Optimisation") wrap without
+  displacing the XP bar. XP bar + LVL sit in a `flex items-center gap-3` sub-row.
+  Pixel XP bar: `border-2 border-border`, LVL number right-aligned in gold.
   Bar fill width = `(level / 10) * 100%`. Fill colour: gold for level 8+, green for 5–7, muted below 5.
 - Skill names are kept in English (tech terms). All UI labels (title, filter names, category headers,
   "LVL" prefix) are translated via `useTranslations('skills')` with keys in both en.json and es.json.
@@ -316,9 +341,17 @@ See PortfolioScreen tab transitions decision above — full details there.
 ### ChatScreen layout
 
 - Fixed overlay (`position: fixed, inset: 0`) on top of PortfolioScreen.
+- Layout uses `h-dvh` (dynamic viewport height) instead of `h-screen`/`100vh` so the
+  layout shrinks correctly when the mobile keyboard opens.
+- Avatar crossfade pair (two `<img>` tags with opacity transition) is extracted into a
+  reusable `avatarCrossfade` JSX variable, rendered in both mobile and desktop positions.
+- On mobile: avatar shown above the input row in a strip with name + level on the left
+  and avatar (`w-24 h-24`, `image-rendering: pixelated`) on the right. Separated from
+  messages by a `border-t-2`. Hidden on desktop (`md:hidden`).
+- On desktop (`md:+`): existing side-panel layout — avatar in a right column
+  (`border-l-2 border-border`, min `w-32 h-32`), messages + input in the left column.
 - Left column: scrollable message history + input row at bottom.
-- Right column (hidden on mobile): avatar image (current emotion, pixelated rendering),
-  character name tag ("▶ PABLO ABRIL" in gold, role in muted below).
+  Message list uses `flex-1 overflow-y-auto`, input row pinned at bottom of flex column.
 - Message bubbles: gold border for Pablo, muted border for user.
 - Streaming in progress: blinking cursor `▌` appended to last Pablo bubble.
 - Close button (ESC or × button) calls `onClose` → returns to portfolio.
@@ -346,6 +379,11 @@ See PortfolioScreen tab transitions decision above — full details there.
   `z-index: 10000` (above the CRT scanline overlay at `z-index: 9999`).
   Modal is 90vw × 90vh, centered, with semi-transparent background backdrop.
   Closes on Escape key or clicking outside the modal panel.
+- **Local CRT overlay**: The modal container uses the `.crt-local` CSS class which adds
+  its own `::after` scanline overlay at `z-index: 5`. The PDF viewport has `relative z-10`
+  so the rendered PDF sits above the local scanlines (clean, no CRT effect on the PDF),
+  while the modal chrome (header, footer, backdrop) keeps the scanline aesthetic.
+  `.crt-local` class is defined in `globals.css` and is reusable for any container.
 - Issue selector buttons in ItemsSection replace the `▶ VIEW` link for magazine items.
   Clicking an issue button opens the modal reader with that issue pre-selected.
   Issue tabs inside the modal header allow switching issues without closing.

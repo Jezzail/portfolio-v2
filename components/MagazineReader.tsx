@@ -120,10 +120,10 @@ export function MagazineReader({
       role="dialog"
       aria-modal="true"
     >
-      {/* Modal container: 90% of screen */}
-      <div className="flex h-[90vh] w-[90vw] flex-col border-2 border-border bg-surface">
+      {/* Modal container: 90% of screen — local CRT for chrome scanlines */}
+      <div className="crt-local flex h-[90vh] w-[90vw] flex-col border-2 border-border bg-surface">
         {/* Header: issue tabs + close button */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-border p-3">
+        <div className="flex items-start sm:items-center justify-between gap-2 border-b-2 border-border p-3">
           <div
             className="flex flex-wrap gap-2"
             role="tablist"
@@ -156,10 +156,10 @@ export function MagazineReader({
           </button>
         </div>
 
-        {/* PDF viewport — fills remaining space */}
+        {/* PDF viewport — z-10 sits above the local CRT overlay (z-5) */}
         <div
           ref={viewportRef}
-          className="flex-1 flex items-center justify-center overflow-hidden"
+          className="relative z-10 flex-1 flex items-center justify-center overflow-hidden"
         >
           {loadError ? (
             <div className="flex flex-col items-center gap-3 p-6">

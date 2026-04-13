@@ -32,7 +32,7 @@ export function QuestsSection() {
     filter === "all" ? quests : quests.filter((q) => q.status === filter);
 
   return (
-    <section className="border-2 border-border bg-surface p-6 sm:p-8 space-y-6">
+    <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
       {/* Section title */}
       <h2 className="text-accent-gold text-sm sm:text-base tracking-wide">
         ─ {t("title")} ─
@@ -46,7 +46,7 @@ export function QuestsSection() {
             type="button"
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
-            className={`border-2 px-3 py-2 text-xs tracking-wide transition-colors ${
+            className={`border-2 px-3 py-2 text-2xs sm:text-xs tracking-wide transition-colors ${
               filter === f
                 ? "border-border-active text-accent-gold"
                 : "border-border text-text-muted hover:text-text-primary"
