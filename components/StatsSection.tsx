@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 const CHAR_INFO = [
   { labelKey: "name", valueKey: "nameValue" },
   { labelKey: "class", valueKey: "classValue" },
+  { labelKey: "experience", valueKey: "experienceValue" },
   { labelKey: "guild", valueKey: "guildValue" },
   { labelKey: "location", valueKey: "locationValue" },
 ] as const;
