@@ -9,12 +9,12 @@ const FILTERS: QuestFilter[] = ["all", "current", "completed"];
 
 const FILTER_I18N: Record<QuestFilter, string> = {
   all: "filterAll",
-  current: "filterCurrent",
+  current: "filterActive",
   completed: "filterCompleted",
 };
 
 const STATUS_I18N: Record<QuestStatus, string> = {
-  current: "statusCurrent",
+  current: "statusActive",
   completed: "statusCompleted",
 };
 
@@ -70,7 +70,7 @@ export function QuestsSection() {
                 {quest.company}
               </h3>
               <span
-                className={`border-2 px-2 py-1 text-2xs sm:text-xs tracking-wide ${statusColorClass(quest.status)}`}
+                className={`px-2 py-1 text-2xs sm:text-xs tracking-wide ${statusColorClass(quest.status)}`}
               >
                 {t(STATUS_I18N[quest.status])}
               </span>
@@ -90,7 +90,7 @@ export function QuestsSection() {
             <ul className="space-y-1">
               {quest.objectives.map((obj) => (
                 <li key={obj} className="text-text-primary text-xs">
-                  ▶ {t(obj)}
+                  {"\u25B6\uFE0E"} {t(obj)}
                 </li>
               ))}
             </ul>

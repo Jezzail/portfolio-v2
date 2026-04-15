@@ -6,9 +6,8 @@ import { skills } from "@/data/skills";
 import type { SkillCategory, SkillLevel } from "@/types";
 
 const CATEGORY_ORDER: SkillCategory[] = [
-  "frontend",
-  "mobile",
-  "tooling",
+  "mobile_frontend",
+  "product",
   "leadership",
 ];
 const MAX_SKILL_LEVEL = 10;
@@ -18,16 +17,14 @@ type Filter = (typeof FILTERS)[number];
 
 const FILTER_I18N: Record<Filter, string> = {
   all: "filterAll",
-  frontend: "filterFrontend",
-  mobile: "filterMobile",
-  tooling: "filterTooling",
+  mobile_frontend: "filterMobileFrontend",
+  product: "filterProduct",
   leadership: "filterLeadership",
 };
 
 const CATEGORY_I18N: Record<SkillCategory, string> = {
-  frontend: "categoryFrontend",
-  mobile: "categoryMobile",
-  tooling: "categoryTooling",
+  mobile_frontend: "categoryMobileFrontend",
+  product: "categoryProduct",
   leadership: "categoryLeadership",
 };
 
@@ -95,7 +92,7 @@ export function SkillsSection() {
             {/* Category header — only shown in ALL view */}
             {filter === "all" && (
               <h3 className="text-text-muted text-xs sm:text-sm tracking-wide">
-                ▸ {t(CATEGORY_I18N[category])}
+                {"\u25B6\uFE0E"} {t(CATEGORY_I18N[category])}
               </h3>
             )}
 

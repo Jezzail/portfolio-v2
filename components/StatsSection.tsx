@@ -80,7 +80,7 @@ export function StatsSection() {
                   rel={isHttpLink ? "noopener noreferrer" : undefined}
                   className="text-text-primary text-xs sm:text-sm hover:text-accent-gold transition-colors"
                 >
-                  <span aria-hidden="true">▶ </span>
+                  <span aria-hidden="true">{"\u25B6\uFE0E"} </span>
                   {t(labelKey)}
                 </a>
               </li>

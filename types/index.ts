@@ -19,9 +19,10 @@ export type AvatarEmotion =
   | "focused"
   | "embarrassed"
   | "explaining"
+  | "chad"
   | "error";
 
-export type SkillCategory = "frontend" | "mobile" | "tooling" | "leadership";
+export type SkillCategory = "mobile_frontend" | "product" | "leadership";
 
 export type SkillLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 

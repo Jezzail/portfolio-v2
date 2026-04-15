@@ -13,7 +13,7 @@ export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-background text-text-primary">
+    <div className="relative min-h-dvh bg-background text-text-primary">
       <AnimatePresence mode="wait">
         {activeScreen === "title" && (
           <motion.div
@@ -21,7 +21,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="mx-auto max-w-215"
+            className="mx-auto max-w-215 h-full"
           >
             <TitleScreen onStart={() => setActiveScreen("portfolio")} />
           </motion.div>

@@ -103,7 +103,8 @@ Since this is an SPA, we use next-intl's "without i18n routing" setup:
 
 - `PortfolioScreen` owns `activeTab` state and delegates tab rendering to `TabNav`.
 - Content area uses `AnimatePresence mode="wait"` with subtle y-axis fade (`y: 4` → `0` → `-4`,
-  150ms) between tab switches.
+  150ms) between tab switches. `onExitComplete` scrolls to top so the scroll happens while the
+  content area is empty (between exit and enter animations).
 - ASK PABLO is an inline navigator bar between HudBar and TabNav (inside the sticky header
   group). Full-width button with chat icon, `[ ASK PABLO ]` title + subtitle on left,
   `▶ OPEN` on right. Uses `nav.askPablo`, `nav.askPabloDesc`, `nav.open` i18n keys.
@@ -262,10 +263,10 @@ See PortfolioScreen tab transitions decision above — full details there.
 
 ### SkillsSection (completed)
 
-- Data lives in `data/skills.ts` — typed `Skill[]` array with 14 skills across 4 categories
-  (frontend, mobile, tooling, leadership). `Skill` and `SkillCategory` types in `types/index.ts`.
-- Category filter tabs: ALL / FRONTEND / MOBILE / TOOLING / LEADERSHIP. Active filter highlighted
-  with `border-border-active text-accent-gold`. Filter state managed via `useState<Filter>`.
+- Data lives in `data/skills.ts` — typed `Skill[]` array with 10 skills across 3 categories
+  (mobile_frontend, product, leadership). `Skill` and `SkillCategory` types in `types/index.ts`.
+- Category filter tabs: ALL / MOBILE & FRONTEND / SHIPPING PRODUCT / LEADERSHIP. Active filter
+  highlighted with `border-border-active text-accent-gold`. Filter state managed via `useState<Filter>`.
 - When ALL is selected, skills are grouped by category with `▸ CATEGORY` headers.
   When a specific category is selected, group headers are hidden.
 - Each skill row: `flex-col` on mobile, `sm:flex-row sm:items-center` on desktop.
@@ -282,7 +283,7 @@ See PortfolioScreen tab transitions decision above — full details there.
 
 - Data lives in `data/quests.ts` — typed `Quest[]` array with 4 entries (1 current, 3 completed).
   `Quest`, `QuestStatus`, and `QuestFilter` types in `types/index.ts`.
-- Filter tabs: ALL / CURRENT / PAST. Active filter highlighted with `border-border-active text-accent-gold`.
+- Filter tabs: ALL / ACTIVE / COMPLETE. Active filter highlighted with `border-border-active text-accent-gold`.
   Filter state managed via `useState<QuestFilter>`.
 - Each quest card: bordered container (`border-2 border-border`) with company name (gold), status badge
   (green border + text for ACTIVE, muted for COMPLETE), role, period · location, and ▶-prefixed objectives.
@@ -298,7 +299,7 @@ See PortfolioScreen tab transitions decision above — full details there.
 - No filter tabs — all items displayed in a flat list.
 - Each item card: bordered container (`border-2 border-border`) with item name (gold, or dim if
   locked), rarity badge (colour-coded: gold for legendary, blue for rare, green for uncommon,
-  dim for locked), description, tech tag row, and `▶ VIEW` link button if URL exists.
+  dim for locked), description, slash-separated tech tags, and `▶ VIEW` link button if URL exists.
 - Locked item: dimmed with `opacity-50`, `border-text-dim`, no link button, `[ SLOT LOCKED ]`
   name and `???` description.
 - Rarity badge colours: legendary = `accent-gold`, rare = `accent-blue`, uncommon = `accent-green`,
@@ -335,7 +336,8 @@ See PortfolioScreen tab transitions decision above — full details there.
   then streams the remainder as the visible reply text.
 - ChatScreen renders the dialogue panel (left) + avatar panel (right), RPG style.
 - Emotion image transitions use CSS `opacity` crossfade (300ms) — no Framer Motion
-  needed for this, keeps it lightweight.
+  needed for this, keeps it lightweight. New emotion images are preloaded via `new Image()`
+  before triggering the crossfade, preventing a flash of the previous emotion.
 - `AvatarEmotion` type added to `types/index.ts`.
 
 ### ChatScreen layout
@@ -362,7 +364,9 @@ See PortfolioScreen tab transitions decision above — full details there.
 - Emotion fallback: if the API response does not include `[EMOTION:X]` (missing tag,
   malformed tag, or stream too short), emotion resets to `neutral` instead of staying
   stuck on `thinking`.
-- Auto-focus: input field regains focus automatically after each send/reply cycle completes.
+- Auto-focus: input field regains focus automatically after each send/reply cycle completes
+  (desktop only, `min-width: 768px`). Disabled on mobile to prevent the keyboard from
+  covering the AI reply.
 
 ### MagazineReader / Missed Trigger (completed)
 
@@ -420,7 +424,7 @@ See PortfolioScreen tab transitions decision above — full details there.
 #### Unit tests (`__tests__/unit/`)
 
 - `TitleScreen.test.tsx` — PRESS START renders, save slot text (LV 37, role, location), click calls onStart.
-- `SkillsSection.test.tsx` — all 14 skills render by name, XP bars present, level numbers present.
+- `SkillsSection.test.tsx` — all 10 skills render by name, XP bars present, level numbers present.
 - `QuestsSection.test.tsx` — company names, section title, status badges, translated roles.
 - `StatsSection.test.tsx` — GitHub/LinkedIn/Email links with correct hrefs, section title, name/class.
 - `emotion-parser.test.ts` — tag extraction, all 12 valid emotions, malformed/missing tags, buffer overflow.

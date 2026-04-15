@@ -56,9 +56,11 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  // Focus input on mount and after streaming ends
+  // Focus input on mount and after streaming ends (desktop only)
   useEffect(() => {
-    if (!isStreaming) inputRef.current?.focus();
+    if (!isStreaming && window.matchMedia("(min-width: 768px)").matches) {
+      inputRef.current?.focus();
+    }
   }, [isStreaming]);
 
   // Abort in-flight request and clear reveal timer on unmount
@@ -73,14 +75,26 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     if (emotionRef.current === next) return;
     emotionRef.current = next;
 
-    if (showFirstRef.current) {
-      setImg2Emotion(next);
-      setShowFirst(false);
-      showFirstRef.current = false;
+    const img = new Image();
+    img.src = `/avatar/pat_${next}.png`;
+
+    const apply = () => {
+      if (showFirstRef.current) {
+        setImg2Emotion(next);
+        setShowFirst(false);
+        showFirstRef.current = false;
+      } else {
+        setImg1Emotion(next);
+        setShowFirst(true);
+        showFirstRef.current = true;
+      }
+    };
+
+    if (img.complete) {
+      apply();
     } else {
-      setImg1Emotion(next);
-      setShowFirst(true);
-      showFirstRef.current = true;
+      img.onload = apply;
+      img.onerror = apply;
     }
   }, []);
 
@@ -279,7 +293,8 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
                     : "text-text-muted"
                 }`}
               >
-                ▶ {msg.role === "assistant" ? t("pablo") : t("you")}
+                {"\u25B6\uFE0E"}{" "}
+                {msg.role === "assistant" ? t("pablo") : t("you")}
               </span>
               {isStreaming &&
               i === messages.length - 1 &&
@@ -299,7 +314,9 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         {/* Mobile avatar strip — above input */}
         <div className="flex items-center justify-between border-t-2 border-border mt-2 md:hidden">
           <div className="flex flex-col">
-            <p className="text-xs text-accent-gold mb-1">▶ {tHud("name")}</p>
+            <p className="text-xs text-accent-gold mb-1">
+              {"\u25B6\uFE0E"} {tHud("name")}
+            </p>
             <p className="text-2xs text-text-muted">{tHud("level")}</p>
           </div>
           <div className="relative w-32 h-32 shrink-0">{avatarCrossfade}</div>
@@ -334,7 +351,9 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         <div className="relative min-w-32 min-h-32 w-48 h-48 mb-4">
           {avatarCrossfade}
         </div>
-        <p className="text-sm text-accent-gold mb-1">▶ {tHud("name")}</p>
+        <p className="text-sm text-accent-gold mb-1">
+          {"\u25B6\uFE0E"} {tHud("name")}
+        </p>
         <p className="text-xs text-text-muted">{tHud("level")}</p>
       </div>
     </div>

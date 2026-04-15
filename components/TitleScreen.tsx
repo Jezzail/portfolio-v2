@@ -34,7 +34,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
   };
 
   return (
-    <div className="relative flex h-dvh flex-col items-center justify-center gap-4 sm:gap-8 px-4 sm:px-6 py-6 sm:py-10 select-none overflow-hidden">
+    <div className="relative flex min-h-dvh flex-col items-center justify-evenly gap-4 sm:gap-8 px-4 sm:px-6 py-6 sm:py-10 select-none overflow-hidden">
       {/* ── Toggles (top-right) ── */}
       <div
         className="absolute top-4 right-4 flex items-center gap-2 max-w-215 pointer-events-auto"
@@ -47,7 +47,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
 
       {/* ── Game Title ── */}
       <div className="text-center">
-        <h1 className="text-accent-gold text-2xl sm:text-4xl leading-loose tracking-wider [text-shadow:3px_3px_0px_#b8860b,_6px_6px_0px_#3a2a00]">
+        <h1 className="text-accent-gold text-2xl sm:text-4xl leading-loose tracking-wider [text-shadow:3px_3px_0px_#b8860b,6px_6px_0px_#3a2a00]">
           {t("gameName")}
         </h1>
         <p className="text-text-muted text-xs sm:text-sm mt-2 sm:mt-4 tracking-widest">
@@ -55,7 +55,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
         </p>
       </div>
 
-      {/* ── Save slots + press start ── */}
+      {/* ── Save slots ── */}
       <div className="flex flex-col items-center gap-4 sm:gap-8 w-full">
         {/* ── Save Slots Container ── */}
         <div className="w-full max-w-215 flex flex-col gap-3">
@@ -68,8 +68,12 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
             className="border-2 bg-surface hover:bg-border p-4 sm:p-5 border-border-active transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
           >
             <div className="flex items-center gap-3">
-              {/* Avatar with arrow via ::before */}
-              <div className="relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 border-2 border-text-dim flex items-center justify-center p-0.5 before:content-['▶'] before:absolute before:-left-4 before:text-accent-gold before:text-xs before:opacity-100 before:transition-opacity">
+              {/* Avatar + arrow */}
+              <div className="relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 border-2 border-text-dim flex items-center justify-center p-0.5">
+                {/* Arrow (fixed) */}
+                <span className="absolute -left-4 text-accent-gold text-xs font-mono leading-none">
+                  {"\u25B6\uFE0E"}︎
+                </span>
                 <Image
                   src="/avatar/pat_neutral.png"
                   alt=""
@@ -82,12 +86,10 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
 
               {/* Slot info */}
               <div className="flex-1 min-w-0">
-                {/* Save file label */}
                 <span className="text-text-primary text-xs sm:text-sm truncate block">
                   {t("saveFileLabel")}
                 </span>
 
-                {/* Tags — stacked vertically */}
                 <div className="flex flex-col gap-1 mt-2 text-2xs sm:text-xs">
                   <span>
                     <span className="text-text-muted">{t("classLabel")}</span>{" "}
@@ -108,7 +110,7 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
                 </div>
               </div>
 
-              {/* Active badge — right-aligned, vertically centered */}
+              {/* Active badge */}
               <span className="text-text-muted text-sm shrink-0 self-center hidden sm:inline-block">
                 {t("active")}
               </span>
@@ -138,19 +140,19 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
             </div>
           </div>
         </div>
-
-        {/* ── Press Start ── */}
-        <button
-          onClick={onStart}
-          className="text-accent-gold text-sm sm:text-base animate-blink tracking-widest px-10 py-4 bg-transparent border-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
-        >
-          <span className="inline-flex items-center gap-3">
-            <span>▶</span>
-            <span className="translate-y-0.75">{t("pressStart")}</span>
-            <span>◀</span>
-          </span>
-        </button>
       </div>
+
+      {/* ── Press Start ── */}
+      <button
+        onClick={onStart}
+        className="text-accent-gold text-sm sm:text-base animate-blink tracking-widest px-10 py-4 bg-transparent border-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-gold"
+      >
+        <span className="inline-flex items-center gap-3">
+          <span>{"\u25B6\uFE0E"}</span>
+          <span className="translate-y-0.75">{t("pressStart")}</span>
+          <span>{"\u25C0\uFE0E"}</span>
+        </span>
+      </button>
 
       {/* ── Copyright ── */}
       <p className="absolute bottom-4 left-4 right-4 text-text-dim text-2xs sm:text-xs tracking-wide text-center">
