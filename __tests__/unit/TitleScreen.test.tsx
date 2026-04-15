@@ -24,7 +24,7 @@ describe("TitleScreen", () => {
 
   it("renders class and location in the save slot", () => {
     render(<TitleScreen onStart={() => {}} />);
-    expect(screen.getByText(/Senior FE/)).toBeInTheDocument();
+    expect(screen.getByText(/Senior Frontend Engineer/)).toBeInTheDocument();
     expect(screen.getByText(/Seoul, South Korea/)).toBeInTheDocument();
   });
 
