@@ -21,6 +21,10 @@ export function PortfolioScreen({ onOpenChat, onBack }: PortfolioScreenProps) {
   const t = useTranslations("nav");
   const tPortfolio = useTranslations("portfolio");
 
+  const handleTabChange = (tab: PortfolioTab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="flex flex-col">
       {/* Sticky header group: HudBar (full width) + TabNav (max-w) */}
@@ -43,18 +47,21 @@ export function PortfolioScreen({ onOpenChat, onBack }: PortfolioScreenProps) {
               </span>
             </div>
             <span className="shrink-0 text-2xs sm:text-xs text-accent-gold">
-              ▶ {t("open")}
+              {"\u25B6\uFE0E"} {t("open")}
             </span>
           </button>
 
-          <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+          <TabNav activeTab={activeTab} onTabChange={handleTabChange} />
         </div>
       </div>
 
       {/* Content area */}
       <div className="mx-auto max-w-215 w-full">
         <main className="p-4 sm:p-6">
-          <AnimatePresence mode="wait">
+          <AnimatePresence
+            mode="wait"
+            onExitComplete={() => window.scrollTo({ top: 0 })}
+          >
             <motion.div
               key={activeTab}
               initial={{ opacity: 0, y: 4 }}

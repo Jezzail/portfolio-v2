@@ -131,9 +131,24 @@ body::after {
    ─────────────────────────────────────────────── */
 * {
   cursor:
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="4" height="4" fill="%23f0d060"/><rect x="4" y="4" width="4" height="4" fill="%23f0d060"/><rect x="8" y="8" width="4" height="4" fill="%23f0d060"/><rect x="0" y="4" width="4" height="4" fill="%23e8e8d0"/><rect x="4" y="8" width="4" height="4" fill="%23e8e8d0"/></svg>')
-      0 0,
+    url("/cursors/sword_24.png?v=dev-10") 0 0,
+    url("/cursors/sword_16.png?v=dev-10") 0 0,
     auto;
+}
+
+button,
+a,
+[role="button"] {
+  cursor:
+    url("/cursors/pointer_24.png?v=dev-10") 6 0,
+    url("/cursors/pointer_16.png?v=dev-10") 4 0,
+    pointer;
+}
+
+button *,
+a *,
+[role="button"] * {
+  cursor: inherit;
 }
 
 /* ───────────────────────────────────────────────

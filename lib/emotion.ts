@@ -12,6 +12,7 @@ const VALID_EMOTIONS: readonly AvatarEmotion[] = [
   "focused",
   "embarrassed",
   "explaining",
+  "chad",
   "error",
 ] as const;
 

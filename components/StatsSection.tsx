@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 const CHAR_INFO = [
   { labelKey: "name", valueKey: "nameValue" },
   { labelKey: "class", valueKey: "classValue" },
+  { labelKey: "experience", valueKey: "experienceValue" },
   { labelKey: "guild", valueKey: "guildValue" },
   { labelKey: "location", valueKey: "locationValue" },
 ] as const;
@@ -80,7 +81,7 @@ export function StatsSection() {
                   rel={isHttpLink ? "noopener noreferrer" : undefined}
                   className="text-text-primary text-xs sm:text-sm hover:text-accent-gold transition-colors"
                 >
-                  <span aria-hidden="true">▶ </span>
+                  <span aria-hidden="true">{"\u25B6\uFE0E"} </span>
                   {t(labelKey)}
                 </a>
               </li>

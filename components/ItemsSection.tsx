@@ -20,13 +20,13 @@ const RARITY_I18N: Record<ItemRarity, string> = {
 function rarityColorClass(rarity: ItemRarity): string {
   switch (rarity) {
     case "legendary":
-      return "border-accent-gold text-accent-gold";
+      return "text-accent-gold";
     case "rare":
-      return "border-accent-blue text-accent-blue";
+      return "text-accent-blue";
     case "uncommon":
-      return "border-accent-green text-accent-green";
+      return "text-accent-green";
     case "locked":
-      return "border-text-dim text-text-dim";
+      return "text-text-dim";
     default:
       return assertNever(rarity);
   }
@@ -69,7 +69,7 @@ export function ItemsSection() {
                   {t(item.name)}
                 </h3>
                 <span
-                  className={`border-2 px-2 py-1 text-2xs sm:text-xs tracking-wide ${rarityColorClass(item.rarity)}`}
+                  className={`px-2 py-1 text-2xs sm:text-xs tracking-wide ${rarityColorClass(item.rarity)}`}
                 >
                   {t(RARITY_I18N[item.rarity])}
                 </span>
@@ -86,16 +86,9 @@ export function ItemsSection() {
 
               {/* Tech tags */}
               {item.tech.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {item.tech.map((tag) => (
-                    <span
-                      key={tag}
-                      className="border-2 border-border px-2 py-1 text-2xs sm:text-xs text-text-muted tracking-wide"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <p className="text-2xs sm:text-xs text-text-muted tracking-wide">
+                  {item.tech.join(" / ")}
+                </p>
               )}
 
               {/* Magazine issue selector (replaces VIEW button) */}
@@ -126,7 +119,7 @@ export function ItemsSection() {
                     rel="noopener noreferrer"
                     className="inline-block border-2 border-border px-3 py-2 text-xs text-accent-gold tracking-wide hover:border-border-active transition-colors"
                   >
-                    <span aria-hidden="true">▶ </span>
+                    <span aria-hidden="true">{"\u25B6\uFE0E"} </span>
                     {t("viewProject")}
                   </a>
                   {item.linkNote && (

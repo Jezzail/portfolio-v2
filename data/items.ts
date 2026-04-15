@@ -8,7 +8,6 @@ export const items: Item[] = [
     description: "itemDescTaba",
     tech: ["React Native", "TypeScript", "Redux", "Firebase"],
     link: "https://www.tabataxi.app/",
-    linkNote: "itemLinkNoteTaba",
   },
   {
     id: "portfolio",
@@ -16,7 +15,7 @@ export const items: Item[] = [
     rarity: "rare",
     description: "itemDescPortfolio",
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    link: "https://github.com/Jezzail/portfolio",
+    link: "https://github.com/Jezzail/portfolio-v2",
   },
   {
     id: "globaleur",
@@ -25,7 +24,6 @@ export const items: Item[] = [
     description: "itemDescGlobaleur",
     tech: ["React.js", "TypeScript", "Node.js"],
     link: "https://www.globaleur.com/",
-    linkNote: "itemLinkNoteGlobaleur",
   },
   {
     id: "missed-trigger",
