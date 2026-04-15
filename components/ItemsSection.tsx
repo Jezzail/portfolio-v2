@@ -20,13 +20,13 @@ const RARITY_I18N: Record<ItemRarity, string> = {
 function rarityColorClass(rarity: ItemRarity): string {
   switch (rarity) {
     case "legendary":
-      return "border-accent-gold text-accent-gold";
+      return "text-accent-gold";
     case "rare":
-      return "border-accent-blue text-accent-blue";
+      return "text-accent-blue";
     case "uncommon":
-      return "border-accent-green text-accent-green";
+      return "text-accent-green";
     case "locked":
-      return "border-text-dim text-text-dim";
+      return "text-text-dim";
     default:
       return assertNever(rarity);
   }

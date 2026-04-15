@@ -41,7 +41,7 @@ describe("tryExtractEmotion", () => {
     expect(result).toEqual({ emotion: "neutral", rest: longBuffer });
   });
 
-  it("handles all 12 valid emotions", () => {
+  it("handles all 13 valid emotions", () => {
     const emotions = [
       "neutral",
       "happy",
@@ -54,6 +54,7 @@ describe("tryExtractEmotion", () => {
       "focused",
       "embarrassed",
       "explaining",
+      "chad",
       "error",
     ];
 

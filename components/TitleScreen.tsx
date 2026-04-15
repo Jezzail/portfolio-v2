@@ -71,8 +71,8 @@ export function TitleScreen({ onStart }: TitleScreenProps) {
               {/* Avatar + arrow */}
               <div className="relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 border-2 border-text-dim flex items-center justify-center p-0.5">
                 {/* Arrow (fixed) */}
-                <span className="absolute -left-4 text-accent-gold text-xs font-mono leading-none">
-                  {"\u25B6\uFE0E"}︎
+                <span className="absolute -left-4 text-accent-gold text-xs leading-none">
+                  {"\u25B6\uFE0E"}
                 </span>
                 <Image
                   src="/avatar/pat_neutral.png"

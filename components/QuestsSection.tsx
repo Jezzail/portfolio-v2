@@ -19,9 +19,7 @@ const STATUS_I18N: Record<QuestStatus, string> = {
 };
 
 function statusColorClass(status: QuestStatus): string {
-  return status === "current"
-    ? "border-accent-green text-accent-green"
-    : "border-text-muted text-text-muted";
+  return status === "current" ? "text-accent-green" : "text-text-muted";
 }
 
 export function QuestsSection() {

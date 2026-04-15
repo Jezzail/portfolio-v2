@@ -25,6 +25,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
 
   const showFirstRef = useRef(true);
   const emotionRef = useRef<AvatarEmotion>("neutral");
+  const mountedRef = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +67,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   // Abort in-flight request and clear reveal timer on unmount
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       abortRef.current?.abort();
       if (revealTimerRef.current) clearInterval(revealTimerRef.current);
     };
@@ -79,6 +81,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     img.src = `/avatar/pat_${next}.png`;
 
     const apply = () => {
+      if (!mountedRef.current) return;
       if (showFirstRef.current) {
         setImg2Emotion(next);
         setShowFirst(false);
