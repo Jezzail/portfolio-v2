@@ -34,6 +34,15 @@ describe("QuestsSection", () => {
     expect(screen.getAllByText("COMPLETE").length).toBeGreaterThanOrEqual(1);
   });
 
+  it("renders duration for completed quests", () => {
+    render(<QuestsSection />);
+
+    // Globaleur lead: 2022.09 – 2024.12 → 2y 3m
+    expect(screen.getByText(/2022\.09 – 2024\.12 · 2y 3m/)).toBeInTheDocument();
+    // KNAPP: 2017.10 – 2021.04 → 3y 6m
+    expect(screen.getByText(/2017\.10 – 2021\.04 · 3y 6m/)).toBeInTheDocument();
+  });
+
   it("renders quest roles via i18n keys", () => {
     render(<QuestsSection />);
 

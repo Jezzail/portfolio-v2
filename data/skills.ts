@@ -2,7 +2,7 @@ import type { Skill } from "@/types";
 
 export const skills: Skill[] = [
   // Mobile & Frontend
-  { name: "React Native", level: 10, category: "mobile_frontend" },
+  { name: "React Native", level: 9, category: "mobile_frontend" },
   { name: "React.js", level: 9, category: "mobile_frontend" },
   { name: "TypeScript", level: 9, category: "mobile_frontend" },
   { name: "Next.js", level: 8, category: "mobile_frontend" },

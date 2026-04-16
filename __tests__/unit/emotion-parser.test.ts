@@ -20,6 +20,19 @@ describe("tryExtractEmotion", () => {
     expect(result).toEqual({ emotion: "thinking", rest: "" });
   });
 
+  it("returns neutral immediately for a response that doesn't start with '['", () => {
+    const result = tryExtractEmotion("Hello, nice to meet you!");
+    expect(result).toEqual({
+      emotion: "neutral",
+      rest: "Hello, nice to meet you!",
+    });
+  });
+
+  it("returns neutral immediately for a single-word response without a tag", () => {
+    const result = tryExtractEmotion("Hello");
+    expect(result).toEqual({ emotion: "neutral", rest: "Hello" });
+  });
+
   it("returns null when the tag is incomplete (still accumulating)", () => {
     const result = tryExtractEmotion("[EMOTION:hap");
     expect(result).toBeNull();
