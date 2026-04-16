@@ -1,5 +1,7 @@
 # PABLO ABRIL — Portfolio
 
+![Portfolio preview](https://github.com/user-attachments/assets/cb2c7690-cabb-4918-9687-6a2f6ce805f8)
+
 > **Retro RPG portfolio built with Next.js 16, TypeScript, Tailwind CSS v4, and Framer Motion.**
 > Live at [patportfolio.dev](https://patportfolio.dev)
 
