@@ -76,7 +76,8 @@ function isValidBody(body: unknown): body is ChatRequestBody {
       "content" in m &&
       typeof (m as Record<string, unknown>).content === "string" &&
       (m as Record<string, unknown>).content !== "" &&
-      (m as Record<string, unknown>).content.length <= MAX_MESSAGE_LENGTH &&
+      ((m as Record<string, unknown>).content as string).length <=
+        MAX_MESSAGE_LENGTH &&
       ((m as Record<string, unknown>).role === "user" ||
         (m as Record<string, unknown>).role === "assistant"),
   );
