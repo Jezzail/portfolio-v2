@@ -35,7 +35,7 @@ export function PortfolioScreen({
   return (
     <div className="flex flex-col">
       {/* Sticky header group: HudBar (full width) + TabNav (max-w) */}
-      <div className="sticky top-0 z-40 bg-background">
+      <div className="sticky top-0 z-40 bg-background before:content-[''] before:absolute before:bottom-full before:left-0 before:right-0 before:h-[50vh] before:bg-background">
         <div className="mx-auto max-w-215">
           <HudBar />
 

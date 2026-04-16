@@ -74,9 +74,11 @@
   --radius: 0px;
 }
 
+html,
 body {
   background: var(--color-background);
   color: var(--color-text-primary);
+  overscroll-behavior-y: none;
 }
 
 /* Hide all scrollbars globally while keeping scroll functional */
