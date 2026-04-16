@@ -105,9 +105,18 @@ export async function POST(request: NextRequest) {
   // Configure ALLOWED_ORIGINS (comma-separated) for preview deployments.
   const origin = request.headers.get("origin");
   if (process.env.NODE_ENV === "production" && origin) {
-    const allowedOrigins = process.env.ALLOWED_ORIGINS
+    const rawAllowedOrigins = process.env.ALLOWED_ORIGINS
       ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
       : ["patportfolio.dev"];
+
+    // Normalize entries: extract hostname if the entry looks like a full URL.
+    const allowedOrigins = rawAllowedOrigins.map((o) => {
+      try {
+        return o.includes("://") ? new URL(o).hostname : o;
+      } catch {
+        return o;
+      }
+    });
 
     let isAllowed = false;
 
