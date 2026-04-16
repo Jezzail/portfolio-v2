@@ -107,8 +107,21 @@ export async function POST(request: NextRequest) {
   if (process.env.NODE_ENV === "production" && origin) {
     const allowedOrigins = process.env.ALLOWED_ORIGINS
       ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
-      : ["https://patportfolio.dev"];
-    if (!allowedOrigins.includes(origin)) {
+      : ["patportfolio.dev"];
+
+    let isAllowed = false;
+
+    try {
+      const { hostname } = new URL(origin);
+
+      isAllowed = allowedOrigins.some(
+        (allowed) => hostname === allowed || hostname.endsWith(`.${allowed}`),
+      );
+    } catch {
+      isAllowed = false;
+    }
+
+    if (!isAllowed) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
   }

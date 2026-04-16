@@ -205,7 +205,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
           if (prev < fullTextRef.current.length) return prev + 1;
           return prev;
         });
-      }, 30);
+      }, 20);
 
       while (true) {
         const { done, value } = await reader.read();
