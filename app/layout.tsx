@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Press_Start_2P } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
+
+const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'}document.documentElement.dataset.theme=t}catch(e){}})()`;
 
 const pressStart2P = Press_Start_2P({
   weight: "400",
@@ -38,6 +40,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const t = await getTranslations("hud");
 
   return (
     <html
@@ -48,11 +51,17 @@ export default async function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'}document.documentElement.dataset.theme=t}catch(e){}})()`,
+            __html: THEME_INIT_SCRIPT,
           }}
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:border-2 focus:border-border-active focus:bg-background focus:px-3 focus:py-2 focus:text-xs focus:text-accent-gold"
+        >
+          {t("skipToContent")}
+        </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

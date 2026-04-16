@@ -36,6 +36,10 @@ const RATE_LIMIT = 20;
 const RATE_WINDOW_MS = 60_000;
 const CLEANUP_THRESHOLD = 500;
 
+// Per-message and history size caps
+const MAX_MESSAGE_LENGTH = 2_000;
+const MAX_HISTORY_MESSAGES = 50;
+
 function checkRateLimit(ip: string, limit: number = RATE_LIMIT): boolean {
   const now = Date.now();
 
@@ -71,12 +75,41 @@ function isValidBody(body: unknown): body is ChatRequestBody {
       "role" in m &&
       "content" in m &&
       typeof (m as Record<string, unknown>).content === "string" &&
+      (m as Record<string, unknown>).content !== "" &&
+      (m as Record<string, unknown>).content.length <= MAX_MESSAGE_LENGTH &&
       ((m as Record<string, unknown>).role === "user" ||
         (m as Record<string, unknown>).role === "assistant"),
   );
 }
 
+/**
+ * Strip null bytes and ASCII control characters (keep \t, \n, \r).
+ * Prevents downstream issues when forwarding content to the Anthropic API.
+ */
+function sanitizeContent(content: string): string {
+  return content.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+}
+
 export async function POST(request: NextRequest) {
+  // Enforce JSON content type — rejects unexpected media types early
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return NextResponse.json(
+      { error: "Unsupported Media Type" },
+      { status: 415 },
+    );
+  }
+
+  // Origin check — reject cross-origin requests in production
+  const origin = request.headers.get("origin");
+  if (
+    process.env.NODE_ENV === "production" &&
+    origin &&
+    origin !== "https://patportfolio.dev"
+  ) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     request.headers.get("x-real-ip") ??
@@ -116,6 +149,47 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Payload size guards — prevent DoS via oversized bodies
+  if (body.messages.length > MAX_HISTORY_MESSAGES) {
+    return NextResponse.json(
+      { error: "Too many messages in conversation" },
+      { status: 400 },
+    );
+  }
+  const totalChars = body.messages.reduce(
+    (sum, m) => sum + m.content.length,
+    0,
+  );
+  if (totalChars > 50_000) {
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+  }
+
+  // Conversation structure validation:
+  // — Last message must be from the user (not a fabricated assistant turn)
+  // — Roles must strictly alternate to prevent context poisoning
+  const lastRole = body.messages[body.messages.length - 1].role;
+  if (lastRole !== "user") {
+    return NextResponse.json(
+      { error: "Last message must be from user" },
+      { status: 400 },
+    );
+  }
+  const hasAdjacentSameRole = body.messages.some(
+    (m, i) => i > 0 && m.role === body.messages[i - 1].role,
+  );
+  if (hasAdjacentSameRole) {
+    return NextResponse.json(
+      { error: "Messages must alternate between user and assistant" },
+      { status: 400 },
+    );
+  }
+
+  // Sanitize content — strip null bytes and control characters before forwarding to Anthropic
+  const sanitizedMessages = body.messages.map((m) => ({
+    role: m.role,
+    content: sanitizeContent(m.content),
+  }));
+
   const anthropic = new Anthropic({ apiKey });
 
   try {
@@ -124,10 +198,7 @@ export async function POST(request: NextRequest) {
         model: "claude-sonnet-4-20250514",
         max_tokens: 1024,
         system: SYSTEM_PROMPT,
-        messages: body.messages.map((m) => ({
-          role: m.role,
-          content: m.content,
-        })),
+        messages: sanitizedMessages,
         stream: true,
       },
       { signal: request.signal },

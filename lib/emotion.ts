@@ -28,6 +28,11 @@ export function isValidEmotion(candidate: string): candidate is AvatarEmotion {
 export function tryExtractEmotion(
   emotionBuffer: string,
 ): { emotion: AvatarEmotion; rest: string } | null {
+  // If the response clearly doesn't start with '[', no emotion tag is coming
+  if (emotionBuffer.length > 0 && !emotionBuffer.startsWith("[")) {
+    return { emotion: "neutral", rest: emotionBuffer };
+  }
+
   const closeIdx = emotionBuffer.indexOf("]");
 
   if (closeIdx !== -1) {

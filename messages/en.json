@@ -62,7 +62,8 @@
     "contact": "CONTACT",
     "github": "GitHub",
     "linkedin": "LinkedIn",
-    "email": "Email"
+    "email": "Email",
+    "opensInNewTab": "(opens in new tab)"
   },
   "skills": {
     "title": "SKILLS & ABILITIES",
@@ -143,7 +144,9 @@
     "error": "ERROR: Could not reach Pablo.",
     "close": "CLOSE",
     "pablo": "PABLO",
-    "you": "YOU"
+    "you": "YOU",
+    "inputLabel": "Type your question",
+    "avatarAlt": "Pablo avatar"
   },
   "portfolio": {
     "backToTitle": "BACK TO TITLE"
@@ -158,6 +161,7 @@
     "light": "LIGHT",
     "toggleTheme": "Toggle theme",
     "switchToEs": "Switch to Spanish",
-    "switchToEn": "Switch to English"
+    "switchToEn": "Switch to English",
+    "skipToContent": "Skip to main content"
   }
 }

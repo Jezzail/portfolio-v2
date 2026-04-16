@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import { useTranslations } from "next-intl";
 import { quests } from "@/data/quests";
 import type { QuestFilter, QuestStatus } from "@/types";
@@ -22,12 +22,29 @@ function statusColorClass(status: QuestStatus): string {
   return status === "current" ? "text-accent-green" : "text-text-muted";
 }
 
-export function QuestsSection() {
+function questDuration(start: string, end?: string): string {
+  const [sy, sm] = start.split(".").map(Number);
+  const now = new Date();
+  const [ey, em] = end
+    ? end.split(".").map(Number)
+    : [now.getFullYear(), now.getMonth() + 1];
+  const totalMonths = (ey - sy) * 12 + (em - sm);
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  if (years === 0) return `${months}m`;
+  if (months === 0) return `${years}y`;
+  return `${years}y ${months}m`;
+}
+
+export const QuestsSection = memo(function QuestsSection() {
   const t = useTranslations("quests");
   const [filter, setFilter] = useState<QuestFilter>("all");
 
-  const filtered =
-    filter === "all" ? quests : quests.filter((q) => q.status === filter);
+  const filtered = useMemo(
+    () =>
+      filter === "all" ? quests : quests.filter((q) => q.status === filter),
+    [filter],
+  );
 
   return (
     <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
@@ -79,9 +96,12 @@ export function QuestsSection() {
               {t(quest.role)}
             </p>
 
-            {/* Period · Location */}
+            {/* Period · Duration · Location */}
             <p className="text-text-muted text-xs">
-              {quest.start} – {quest.end ?? t("present")} · {quest.location}
+              {quest.start} – {quest.end ?? t("present")}
+              {quest.end
+                ? ` · ${questDuration(quest.start, quest.end)}`
+                : ""} · {quest.location}
             </p>
 
             {/* Objectives */}
@@ -97,4 +117,4 @@ export function QuestsSection() {
       </div>
     </section>
   );
-}
+});

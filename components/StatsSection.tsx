@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { useTranslations } from "next-intl";
 
 const CHAR_INFO = [
@@ -16,7 +17,7 @@ const LINKS = [
   { labelKey: "email", href: "mailto:pat43607@gmail.com" },
 ] as const;
 
-export function StatsSection() {
+export const StatsSection = memo(function StatsSection() {
   const t = useTranslations("stats");
 
   return (
@@ -79,6 +80,11 @@ export function StatsSection() {
                   href={href}
                   target={isHttpLink ? "_blank" : undefined}
                   rel={isHttpLink ? "noopener noreferrer" : undefined}
+                  aria-label={
+                    isHttpLink
+                      ? `${t(labelKey)} ${t("opensInNewTab")}`
+                      : t(labelKey)
+                  }
                   className="text-text-primary text-xs sm:text-sm hover:text-accent-gold transition-colors"
                 >
                   <span aria-hidden="true">{"\u25B6\uFE0E"} </span>
@@ -91,4 +97,4 @@ export function StatsSection() {
       </div>
     </section>
   );
-}
+});

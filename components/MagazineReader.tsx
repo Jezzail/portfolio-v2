@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import type { MagazineIssue } from "@/types";
@@ -11,7 +17,7 @@ const PDFDocument = dynamic(
       mod.pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${mod.pdfjs.version}/build/pdf.worker.min.mjs`;
       return { default: mod.Document };
     }),
-  { ssr: false },
+  { ssr: false, loading: () => null },
 );
 
 const PDFPage = dynamic(
@@ -37,6 +43,8 @@ export function MagazineReader({
   const [loadError, setLoadError] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const resizeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
 
@@ -47,13 +55,24 @@ export function MagazineReader({
   useEffect(() => {
     if (!viewportRef.current) return;
     const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setViewportWidth(entry.contentRect.width);
-        setViewportHeight(entry.contentRect.height);
-      }
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = setTimeout(() => {
+        for (const entry of entries) {
+          setViewportWidth(entry.contentRect.width);
+          setViewportHeight(entry.contentRect.height);
+        }
+      }, 100);
     });
     observer.observe(viewportRef.current);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+    };
+  }, []);
+
+  // Focus the dialog on mount for accessibility
+  useEffect(() => {
+    dialogRef.current?.focus();
   }, []);
 
   // Close on Escape key
@@ -64,6 +83,30 @@ export function MagazineReader({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
+
+  const handleFocusTrap = useCallback(
+    (e: ReactKeyboardEvent<HTMLDivElement>) => {
+      if (e.key !== "Tab") return;
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input, [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    },
+    [],
+  );
 
   const handleIssueChange = useCallback((index: number) => {
     setActiveIssue(index);
@@ -113,10 +156,13 @@ export function MagazineReader({
 
   return (
     <div
-      className="fixed inset-0 z-10000 flex items-center justify-center bg-background/90"
+      ref={dialogRef}
+      tabIndex={-1}
+      className="fixed inset-0 z-10000 flex items-center justify-center bg-background/90 outline-none"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onKeyDown={handleFocusTrap}
       role="dialog"
       aria-modal="true"
     >

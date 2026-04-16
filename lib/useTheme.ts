@@ -32,7 +32,11 @@ export function useTheme() {
   const toggleTheme = useCallback(() => {
     const next: Theme = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // private browsing — DOM update is enough
+    }
   }, [theme]);
 
   return { theme, toggleTheme };

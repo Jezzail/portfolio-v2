@@ -62,7 +62,8 @@
     "contact": "CONTACTO",
     "github": "GitHub",
     "linkedin": "LinkedIn",
-    "email": "Email"
+    "email": "Email",
+    "opensInNewTab": "(se abre en nueva pesta\u00f1a)"
   },
   "skills": {
     "title": "HABILIDADES Y PODERES",
@@ -143,7 +144,9 @@
     "error": "ERROR: No se pudo contactar a Pablo.",
     "close": "CERRAR",
     "pablo": "PABLO",
-    "you": "TÚ"
+    "you": "TÚ",
+    "inputLabel": "Escribe tu pregunta",
+    "avatarAlt": "Avatar de Pablo"
   },
   "portfolio": {
     "backToTitle": "VOLVER AL TÍTULO"
@@ -158,6 +161,7 @@
     "light": "CLARO",
     "toggleTheme": "Cambiar tema",
     "switchToEs": "Cambiar a español",
-    "switchToEn": "Cambiar a inglés"
+    "switchToEn": "Cambiar a inglés",
+    "skipToContent": "Ir al contenido principal"
   }
 }

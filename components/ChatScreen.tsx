@@ -17,6 +17,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [displayedCharCount, setDisplayedCharCount] = useState(0);
+  const [finalizationPending, setFinalizationPending] = useState(false);
 
   // Two-layer crossfade for avatar emotion transitions
   const [showFirst, setShowFirst] = useState(true);
@@ -31,6 +32,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const fullTextRef = useRef("");
   const revealTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const prevMessageCountRef = useRef(0);
 
@@ -57,6 +59,27 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
+  // Pin container to the visual viewport so the virtual keyboard never
+  // pushes content off-screen on Android Chrome / Samsung Browser.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    const container = containerRef.current;
+    if (!vv || !container) return;
+
+    const update = () => {
+      container.style.top = `${vv.offsetTop}px`;
+      container.style.height = `${vv.height}px`;
+    };
+
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, []);
+
   // Focus input on mount and after streaming ends (desktop only)
   useEffect(() => {
     if (!isStreaming && window.matchMedia("(min-width: 768px)").matches) {
@@ -66,6 +89,7 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
 
   // Abort in-flight request and clear reveal timer on unmount
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
       mountedRef.current = false;
       abortRef.current?.abort();
@@ -101,14 +125,54 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
     }
   }, []);
 
+  // Finalize once the character reveal catches up to the full streamed text
+  useEffect(() => {
+    if (!finalizationPending) return;
+    if (displayedCharCount < fullTextRef.current.length) return;
+
+    if (revealTimerRef.current) {
+      clearInterval(revealTimerRef.current);
+      revealTimerRef.current = null;
+    }
+
+    setFinalizationPending(false);
+
+    if (fullTextRef.current.length > 0) {
+      setMessages((prev) => {
+        const updated = [...prev];
+        if (updated[updated.length - 1]?.role === "assistant") {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            content: fullTextRef.current,
+          };
+        }
+        return updated;
+      });
+    }
+
+    if (emotionRef.current === "thinking") {
+      updateEmotion("neutral");
+    }
+
+    setIsStreaming(false);
+    abortRef.current = null;
+  }, [finalizationPending, displayedCharCount, updateEmotion]);
+
   const handleSend = async () => {
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
 
-    const userMsg: ChatMessage = { role: "user", content: trimmed };
+    const userMsg: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmed,
+    };
     const history = [...messages, userMsg];
 
-    setMessages([...history, { role: "assistant", content: "" }]);
+    setMessages([
+      ...history,
+      { id: crypto.randomUUID(), role: "assistant", content: "" },
+    ]);
     setInput("");
     setIsStreaming(true);
     setDisplayedCharCount(0);
@@ -190,11 +254,15 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         const updated = [...prev];
         if (updated[updated.length - 1]?.role === "assistant") {
           updated[updated.length - 1] = {
-            role: "assistant",
+            ...updated[updated.length - 1],
             content: t("error"),
           };
         } else {
-          updated.push({ role: "assistant", content: t("error") });
+          updated.push({
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: t("error"),
+          });
         }
         return updated;
       });
@@ -208,51 +276,28 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         return;
       }
 
-      // Stop the reveal timer and immediately show all text
-      if (revealTimerRef.current) {
-        clearInterval(revealTimerRef.current);
-        revealTimerRef.current = null;
-      }
-      setDisplayedCharCount(fullTextRef.current.length);
-
-      // Finalize the message with full text only when streaming produced content.
-      // This avoids overwriting an error message set in catch with an empty string.
-      if (fullTextRef.current.length > 0) {
-        setMessages((prev) => {
-          const updated = [...prev];
-          if (updated[updated.length - 1]?.role === "assistant") {
-            updated[updated.length - 1] = {
-              role: "assistant",
-              content: fullTextRef.current,
-            };
-          }
-          return updated;
-        });
-      }
-
-      // Fallback: reset to neutral if still thinking
-      if (emotionRef.current === "thinking") {
-        updateEmotion("neutral");
-      }
-
-      setIsStreaming(false);
-      abortRef.current = null;
+      // Signal that streaming is done. The finalization effect will wait for
+      // the character reveal animation to catch up before cleaning up.
+      setFinalizationPending(true);
     }
   };
 
   const avatarCrossfade = (
     <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`/avatar/pat_${img1Emotion}.png`}
-        alt=""
-        data-pixel
+        alt={t("avatarAlt")}
+        data-pixel=""
         className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
         style={{ opacity: showFirst ? 1 : 0 }}
       />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`/avatar/pat_${img2Emotion}.png`}
         alt=""
-        data-pixel
+        aria-hidden="true"
+        data-pixel=""
         className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
         style={{ opacity: showFirst ? 0 : 1 }}
       />
@@ -260,7 +305,11 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col md:flex-row h-dvh bg-background">
+    <div
+      ref={containerRef}
+      className="fixed inset-x-0 top-0 z-50 flex flex-col md:flex-row bg-background"
+      style={{ height: "100dvh" }}
+    >
       {/* Chat panel */}
       <div className="flex flex-1 flex-col p-4 md:p-6 min-h-0">
         {/* Header */}
@@ -279,10 +328,10 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
           {messages.map((msg, i) => (
             <div
-              key={i}
+              key={msg.id}
               className={`border-2 p-3 text-xs md:text-sm leading-relaxed ${
                 msg.role === "assistant"
                   ? "border-border-active"
@@ -327,8 +376,12 @@ export function ChatScreen({ onClose }: ChatScreenProps) {
 
         {/* Input row */}
         <div className="flex gap-2 mt-2 pt-2 border-t-2 border-border md:mt-3 md:pt-3">
+          <label htmlFor="chat-input" className="sr-only">
+            {t("inputLabel")}
+          </label>
           <input
             ref={inputRef}
+            id="chat-input"
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}

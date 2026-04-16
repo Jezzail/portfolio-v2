@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import { useTranslations } from "next-intl";
 import { skills } from "@/data/skills";
 import type { SkillCategory, SkillLevel } from "@/types";
@@ -34,25 +34,31 @@ function barColorClass(level: SkillLevel): string {
   return "bg-text-muted";
 }
 
-export function SkillsSection() {
+export const SkillsSection = memo(function SkillsSection() {
   const t = useTranslations("skills");
   const [filter, setFilter] = useState<Filter>("all");
 
-  const filtered =
-    filter === "all" ? skills : skills.filter((s) => s.category === filter);
+  const filtered = useMemo(
+    () =>
+      filter === "all" ? skills : skills.filter((s) => s.category === filter),
+    [filter],
+  );
 
-  const grouped =
-    filter === "all"
-      ? CATEGORY_ORDER.filter((cat) =>
-          filtered.some((s) => s.category === cat),
-        ).map((cat) => ({
-          category: cat,
-          items: filtered.filter((s) => s.category === cat),
-        }))
-      : CATEGORY_ORDER.filter((cat) => cat === filter).map((cat) => ({
-          category: cat,
-          items: filtered,
-        }));
+  const grouped = useMemo(
+    () =>
+      filter === "all"
+        ? CATEGORY_ORDER.filter((cat) =>
+            filtered.some((s) => s.category === cat),
+          ).map((cat) => ({
+            category: cat,
+            items: filtered.filter((s) => s.category === cat),
+          }))
+        : CATEGORY_ORDER.filter((cat) => cat === filter).map((cat) => ({
+            category: cat,
+            items: filtered,
+          })),
+    [filter, filtered],
+  );
 
   return (
     <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
@@ -132,4 +138,4 @@ export function SkillsSection() {
       </div>
     </section>
   );
-}
+});

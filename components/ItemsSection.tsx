@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { memo } from "react";
 import { useTranslations } from "next-intl";
 import { items, magazineIssues } from "@/data/items";
-import { MagazineReader } from "@/components/MagazineReader";
 import type { ItemRarity } from "@/types";
 
 function assertNever(x: never): never {
@@ -36,11 +35,13 @@ function nameColorClass(rarity: ItemRarity): string {
   return rarity === "locked" ? "text-text-dim" : "text-accent-gold";
 }
 
-export function ItemsSection() {
+export const ItemsSection = memo(function ItemsSection({
+  onOpenReader,
+}: {
+  onOpenReader: (index: number) => void;
+}) {
   const t = useTranslations("items");
   const tMag = useTranslations("items.magazine");
-  const [readerOpen, setReaderOpen] = useState(false);
-  const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
 
   return (
     <section className="border-2 border-border bg-surface p-4 sm:p-8 space-y-4 sm:space-y-8">
@@ -98,10 +99,7 @@ export function ItemsSection() {
                     <button
                       key={iss.issue}
                       type="button"
-                      onClick={() => {
-                        setSelectedIssueIndex(idx);
-                        setReaderOpen(true);
-                      }}
+                      onClick={() => onOpenReader(idx)}
                       className="border-2 border-border px-3 py-2 text-xs text-text-muted tracking-wide hover:border-border-active hover:text-accent-gold transition-colors"
                     >
                       {tMag(iss.labelKey)}
@@ -133,15 +131,6 @@ export function ItemsSection() {
           );
         })}
       </div>
-
-      {/* Magazine reader modal */}
-      {readerOpen && (
-        <MagazineReader
-          issues={magazineIssues}
-          initialIssueIndex={selectedIssueIndex}
-          onClose={() => setReaderOpen(false)}
-        />
-      )}
     </section>
   );
-}
+});

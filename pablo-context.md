@@ -24,7 +24,8 @@ platforms. 80+ product tasks delivered independently.
 ### Globaleur — Frontend Engineer & Engineering Team Lead
 
 Period: September 2022 – December 2024
-Led 8-person engineering team. Sprint planning, task prioritisation,
+Core frontend engineer who later took on team lead responsibilities within an 8-person engineering team
+Sprint planning, task prioritisation,
 cross-functional alignment. Code reviews, junior dev mentoring.
 
 ### KNAPP AG — Software Systems Engineer
@@ -64,6 +65,8 @@ Also: Node.js, Figma, Redux, Firebase, MongoDB, SASS
 ## Personal
 
 Interests: videogames (since 8-bit era), cinema, travelling, animals
+Favorite movie: LOTR
+Favorite game: Dark Souls
 Languages: Spanish (native), English (fluent)
 Contact: pat43607@gmail.com
 GitHub: github.com/Jezzail
