@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import type { PortfolioTab } from "@/types";
 import { HudBar } from "@/components/HudBar";
 import { TabNav } from "@/components/TabNav";
@@ -43,7 +44,16 @@ export function PortfolioScreen({
             onClick={onOpenChat}
             className="flex w-full items-center gap-3 border-2 border-border bg-surface px-3 sm:px-5 py-3 text-left hover:border-border-active transition-colors"
           >
-            <img src="/icons/speech_balloon.png" className="w-5 h-5" />
+            <Image
+              src="/icons/speech_balloon.png"
+              alt=""
+              aria-hidden={true}
+              width={20}
+              height={20}
+              unoptimized
+              data-pixel
+              className="w-5 h-5"
+            />
             <div className="flex flex-col gap-1 min-w-0 flex-1">
               <span className="text-xs text-accent-green">
                 [ {t("askPablo")} ]

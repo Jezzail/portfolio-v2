@@ -75,7 +75,7 @@ function isValidBody(body: unknown): body is ChatRequestBody {
       "role" in m &&
       "content" in m &&
       typeof (m as Record<string, unknown>).content === "string" &&
-      (m as Record<string, unknown>).content !== "" &&
+      ((m as Record<string, unknown>).content as string).trim() !== "" &&
       ((m as Record<string, unknown>).content as string).length <=
         MAX_MESSAGE_LENGTH &&
       ((m as Record<string, unknown>).role === "user" ||
@@ -101,14 +101,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Origin check — reject cross-origin requests in production
+  // Origin check — reject cross-origin requests in production.
+  // Configure ALLOWED_ORIGINS (comma-separated) for preview deployments.
   const origin = request.headers.get("origin");
-  if (
-    process.env.NODE_ENV === "production" &&
-    origin &&
-    origin !== "https://patportfolio.dev"
-  ) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (process.env.NODE_ENV === "production" && origin) {
+    const allowedOrigins = process.env.ALLOWED_ORIGINS
+      ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+      : ["https://patportfolio.dev"];
+    if (!allowedOrigins.includes(origin)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
   }
 
   const ip =
