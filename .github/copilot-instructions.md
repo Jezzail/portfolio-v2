@@ -19,7 +19,7 @@ pablo-context.md as its knowledge base.
 ## Visual design
 
 Retro RPG / 16-bit game aesthetic. Think SNES save screen meets character
-sheet. Reference: joe8lee.com for personality, but retro game execution.
+sheet.
 
 Design tokens (use these EXACTLY, never deviate):
 
