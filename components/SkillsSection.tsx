@@ -7,6 +7,7 @@ import type { SkillCategory, SkillLevel } from "@/types";
 
 const CATEGORY_ORDER: SkillCategory[] = [
   "mobile_frontend",
+  "ai_tooling",
   "product",
   "leadership",
 ];
@@ -18,12 +19,14 @@ type Filter = (typeof FILTERS)[number];
 const FILTER_I18N: Record<Filter, string> = {
   all: "filterAll",
   mobile_frontend: "filterMobileFrontend",
+  ai_tooling: "filterAiTooling",
   product: "filterProduct",
   leadership: "filterLeadership",
 };
 
 const CATEGORY_I18N: Record<SkillCategory, string> = {
   mobile_frontend: "categoryMobileFrontend",
+  ai_tooling: "categoryAiTooling",
   product: "categoryProduct",
   leadership: "categoryLeadership",
 };

@@ -23,7 +23,11 @@ export type AvatarEmotion =
   | "chad"
   | "error";
 
-export type SkillCategory = "mobile_frontend" | "product" | "leadership";
+export type SkillCategory =
+  | "mobile_frontend"
+  | "ai_tooling"
+  | "product"
+  | "leadership";
 
 export type SkillLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
