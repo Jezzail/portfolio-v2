@@ -220,8 +220,10 @@ export async function POST(request: NextRequest) {
   try {
     const stream = await anthropic.messages.create(
       {
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-5",
         max_tokens: 1024,
+        thinking: { type: "disabled" },
+        output_config: { effort: "low" },
         system: SYSTEM_PROMPT,
         messages: sanitizedMessages,
         stream: true,
@@ -263,7 +265,8 @@ export async function POST(request: NextRequest) {
         "Cache-Control": "no-cache",
       },
     });
-  } catch {
+  } catch (error) {
+    console.error("Anthropic API error:", error);
     return NextResponse.json(
       { error: "Failed to generate response" },
       { status: 500 },
